@@ -17,8 +17,11 @@ int main(void)
 
     auto grid = Enmesh::grid_mesh(10, 10);
 
-
     auto greenland = Enmesh::load_geometry(PATH "greenland.mesh");
+    std::cout << greenland.num_vertices() << "\n";
+    std::cout << greenland.num_faces() << "\n";
+
+    Enmesh::save_geometry(greenland, PATH "greenland_copy.mesh");
 
     printf("Done.\n");
 }

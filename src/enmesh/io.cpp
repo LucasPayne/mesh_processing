@@ -1,11 +1,53 @@
+#include <iomanip>
 #include "mesh_processing.h"
 namespace Enmesh {
+
+
+void save_geometry(SurfaceGeometry &geom, const std::string &filename)
+{
+    std::ofstream out;
+    out.open(filename, std::ios::out | std::ios::trunc);
+    assert(out);
+
+    out << "MeshVersionFormatted 1\n";
+    out << "Dimension 3\n\n";
+
+    out << "Vertices\n";
+    out << std::to_string(geom.num_vertices()) << "\n";
+    // Vertex indices in the ElementPool sense are not necessarily contiguous.
+    // So, a temporary attachment is used to give contiguous indices to the vertices.
+    auto vertex_indices = VertexAttachment<uint32_t>(geom.mesh);
+    int index = 0;
+    for (auto vertex : geom.vertices()) {
+        vertex_indices[vertex] = index; // Give the vertices contiguous indices.
+        vec_t position = geom.vertex_positions[vertex];
+        out << std::setprecision(5) << "  " << position.x() << " " << position.y() << " " << position.z() << "\n";
+        index ++;
+    }
+    out << "\n";
+    out << "Triangles\n";
+    out << std::to_string(geom.num_faces()) << "\n";
+    for (auto face : geom.faces()) {
+        auto start = face.halfedge();
+        auto he = start;
+        do {
+            uint32_t vertex_index = vertex_indices[he.vertex()];
+            out << " " << vertex_index;
+            he = he.next();
+        } while (start != he);
+        out << "\n";
+    }
+    out << "\n";
+    out << "End\n";
+
+    out.close();
+}
+
 
 SurfaceGeometry load_geometry(const std::string &filename)
 {
     std::ifstream in;
     in.open(filename, std::ios::in);
-    std::cout << filename << "\n";
     assert(in);
 
     
