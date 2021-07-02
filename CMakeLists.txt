@@ -8,9 +8,12 @@ find_package(Eigen3 REQUIRED)
 
 include_directories(. include src ${EIGEN3_INCLUDE_DIR})
 add_compile_options(-D DEFAULT_VEC_TYPE_EIGEN)
-# add_compile_options(-D DEFAULT_VEC_TYPE_SPATIAL_ALGEBRA)
 
 add_library(mesh_processing
     src/surface_mesh/surface_mesh.cpp
 )
 target_compile_options(mesh_processing PRIVATE -Wall -g)
+
+# Compile example applications
+add_executable(simple1 examples/simple1/simple1.cpp)
+target_link_libraries(simple1 mesh_processing)
