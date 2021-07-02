@@ -2,7 +2,8 @@
 #define SURFACE_GEOMTRY_H
 
 
-template <typename vec_t = Eigen::Vector3f>
+using vec_t = Eigen::Vector3f;
+
 class SurfaceGeometry {
 public:
     SurfaceMesh mesh;
@@ -36,6 +37,5 @@ public:
     void write_OFF(std::ostream &out);
     void read_OFF(std::istream &in);
 };
-#include "surface_geometry.ipp"
 
 #endif // SURFACE_GEOMTRY_H

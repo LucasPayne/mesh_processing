@@ -11,6 +11,10 @@ add_compile_options(-D DEFAULT_VEC_TYPE_EIGEN)
 
 add_library(mesh_processing
     src/surface_mesh/surface_mesh.cpp
+    src/surface_geometry/surface_geometry.cpp
+    # Enmesh mesh generation sublibrary.
+    src/enmesh/grid.cpp
+    src/enmesh/io.cpp
 )
 target_compile_options(mesh_processing PRIVATE -Wall -g)
 
