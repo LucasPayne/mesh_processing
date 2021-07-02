@@ -1,2 +1,0 @@
-/usr/bin/ar qc libmesh_processing.a CMakeFiles/mesh_processing.dir/src/surface_mesh/surface_mesh.cpp.o
-/usr/bin/ranlib libmesh_processing.a

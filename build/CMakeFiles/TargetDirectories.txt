@@ -1,3 +1,0 @@
-/home/lucas/computer_graphics/mesh_processing/build/CMakeFiles/rebuild_cache.dir
-/home/lucas/computer_graphics/mesh_processing/build/CMakeFiles/mesh_processing.dir
-/home/lucas/computer_graphics/mesh_processing/build/CMakeFiles/edit_cache.dir
