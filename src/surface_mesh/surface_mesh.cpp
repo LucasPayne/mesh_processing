@@ -1,5 +1,5 @@
-#include "mesh_processing/surface_mesh/surface_mesh.h"
-#include "mesh_processing/logging.h"
+#include "mesh_processing.h"
+#include "logging.h"
 #include <algorithm>//reverse
 
 

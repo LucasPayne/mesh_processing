@@ -1,6 +1,5 @@
 #ifndef SURFACE_MESH_H
 #define SURFACE_MESH_H
-#include "mesh_processing/core.h"
 #include <utility>
 #include <map>
 
@@ -18,7 +17,6 @@ class Vertex;
 class Halfedge;
 class Edge;
 class Face;
-
 
 
 /*--------------------------------------------------------------------------------
@@ -350,8 +348,6 @@ private:
     friend class ElementIterator<Edge>;
     friend class ElementIterator<Face>;
 };
-
-
 
 
 #include "surface_mesh.ipp"

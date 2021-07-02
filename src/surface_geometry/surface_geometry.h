@@ -1,15 +1,13 @@
 #ifndef SURFACE_GEOMTRY_H
 #define SURFACE_GEOMTRY_H
-#include "spatial_algebra/spatial_algebra.h"
-#include "mesh_processing/surface_mesh/surface_mesh.h"
 
 
-
+template <typename vec_t = Eigen::Vector3f>
 class SurfaceGeometry {
 public:
     SurfaceMesh mesh;
 
-    Vertex add_vertex(vec3 position);
+    Vertex add_vertex(vec_t position);
     Vertex add_vertex(float x, float y, float z);
     Face add_triangle(Vertex v1, Vertex v2, Vertex v3);
 
@@ -30,23 +28,14 @@ public:
 
     void printout();
 
-    VertexAttachment<vec3> vertex_positions;
-    VertexAttachment<vec3> vertex_normals;
-    FaceAttachment<vec3> face_normals;
-
-
-    // model_loader library related methods.
-
-    // Add the geometry of the given model to the surface.
-    void add_model(MLModel &model);
-
+    VertexAttachment<vec_t> vertex_positions;
+    VertexAttachment<vec_t> vertex_normals;
+    FaceAttachment<vec_t> face_normals;
+    
     // Input/output.
     void write_OFF(std::ostream &out);
     void read_OFF(std::istream &in);
-
-    // Convert the SurfaceGeometry into a triangle-soup model with per-facet normals.
-    MLModel to_model();
 };
-
+#include "surface_geometry.ipp"
 
 #endif // SURFACE_GEOMTRY_H
