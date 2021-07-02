@@ -7,15 +7,8 @@ Other things that could be implemented here are curves and surface methods such 
 -----------------------
 mesh_processing is built with CMake and requires C++11.
 First, make sure all dependencies are available on your system. Create a new directory called "build", and
-run
-```
-    cmake ..
-```
-to generate build files. On Linux systems, continue with
-```
-    make
-```
-to build the library and example applications. To include mesh_processing in a C++ application,
+run "cmake ..".
+To include mesh_processing in a C++ application,
 simply include mesh_processing.h and link against the compiled library.
 
 #Dependencies
