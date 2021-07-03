@@ -2,6 +2,7 @@
 #define SURFACE_MESH_H
 #include <utility>
 #include <map>
+#include <assert.h>
 
 
 // typedefs
@@ -291,6 +292,10 @@ public:
     // Raw editing methods will invalidate the topology. check_topology() must be called to re-verify
     // topological correctness.
     bool check_topology() const;
+    // assert_topology does the same as check_topology, but gives an error if the topology is not correct.
+    inline void assert_topology() const {
+        assert(check_topology());
+    };
 
 
 
