@@ -24,5 +24,6 @@ The half-edge mesh data structure is largely based off of the [paper](imr.sandia
 
 ## The library
 -----------------------
+# SurfaceMesh
 
 

@@ -277,24 +277,34 @@ class SurfaceMesh {
 public:
     SurfaceMesh();
 
-    
-    // Creation methods.
+    // Raw editing methods.
     // These do not necessarily maintain invariants.
     Vertex add_vertex();
     Face add_triangle(Vertex v1, Vertex v2, Vertex v3);
     Face add_face(std::vector<Vertex> &vertices, bool been_flipped = false);
-
     Halfedge add_halfedge(Vertex u, Vertex v);
-    Halfedge get_halfedge(Vertex u, Vertex v);
 
+    // Euler editing methods.
+    // These maintain manifoldness.
+
+
+    // Raw editing methods will invalidate the topology. check_topology() must be called to re-verify
+    // topological correctness.
+    bool check_topology() const;
+
+
+
+    Halfedge get_halfedge(Vertex u, Vertex v);
     // Counting elements.
     size_t num_vertices() const;
     size_t num_edges() const;
     size_t num_faces() const;
 
     void printout();
-
     
+    // Element iterators.
+    // usage:
+    //     for (auto face : mesh.faces()) { ... }
     template <typename T>
     class ElementContainer {
     public:
@@ -318,16 +328,22 @@ public:
         return ElementContainer<Face>(this, &face_pool);
     }
 
-
 private:
+    // Mesh element storage.
+    // An ElementPool only keeps a small amount of data on available element IDs,
+    // and
     ElementPool vertex_pool;
     ElementPool edge_pool;
     ElementPool face_pool;
+    // Incidence information is stored as a collection of functions of the elements (called "attachments").
     VertexAttachment<VertexIncidenceData> vertex_incidence_data;
     EdgeAttachment<HalfedgeIncidenceData> edge_incidence_data;
     FaceAttachment<FaceIncidenceData> face_incidence_data;
 
+    //---
     std::map<std::pair<ElementIndex, ElementIndex>, ElementIndex> halfedge_map; //vertices to halfedge.
+
+    
 
 
     template <typename T>

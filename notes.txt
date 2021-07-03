@@ -1,2 +1,13 @@
 https://gmsh.info/
 https://www.cgal.org/
+
+
+Types of topology.
+Closed manifold.
+Manifold with boundary. Boundary is a boolean function of edges.
+Manifoldness tests, verify if has the right topology (will need to do after non-Euler editing).
+
+Euler operations.
+Maintain manifoldness. Might have to check when editing boundary.
+
+
