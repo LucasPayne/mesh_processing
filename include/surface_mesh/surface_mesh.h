@@ -16,7 +16,6 @@ template <typename T> class ElementAttachment;
 class ElementAttachmentBase;
 class Vertex;
 class Halfedge;
-class Edge;
 class Face;
 
 
@@ -121,9 +120,9 @@ public:
 
 
 template <typename T>
-class EdgeAttachment : public ElementAttachment<T> {
+class HalfedgeAttachment : public ElementAttachment<T> {
 public:
-    EdgeAttachment(SurfaceMesh &mesh);
+    HalfedgeAttachment(SurfaceMesh &mesh);
     T &operator[](const Halfedge &halfedge);
 };
 
@@ -192,21 +191,6 @@ private:
     {}
     void set_halfedge(Halfedge halfedge);
 
-    friend class SurfaceMesh;
-};
-
-class Edge : public ElementHandle {
-public:
-    Halfedge a() const;
-    Halfedge b() const;
-    Halfedge halfedge(int index) const;
-    Edge() :
-        ElementHandle(g_dummy_surface_mesh, InvalidElementIndex)
-    {}
-private:
-    Edge(SurfaceMesh &_mesh, ElementIndex _index) :
-        ElementHandle(_mesh, _index)
-    {}
     friend class SurfaceMesh;
 };
 
@@ -321,7 +305,7 @@ public:
         return ElementContainer<Vertex>(this, &vertex_pool);
     }
     ElementContainer<Halfedge> halfedges() {
-        return ElementContainer<Edge>(this, &halfedge_pool);
+        return ElementContainer<Halfedge>(this, &halfedge_pool);
     }
     ElementContainer<Face> faces() {
         return ElementContainer<Face>(this, &face_pool);
@@ -344,9 +328,6 @@ private:
     std::map<std::pair<ElementIndex, ElementIndex>, ElementIndex> halfedge_map; //vertices to halfedge.
 
     
-
-    Halfedge add_halfedge(Vertex u, Vertex v);
-
     template <typename T>
     friend class ElementAttachment;
     template <typename T>
@@ -357,7 +338,6 @@ private:
     friend class FaceAttachment;
 
     friend class Vertex;
-    friend class Edge;
     friend class Halfedge;
     friend class Face;
 

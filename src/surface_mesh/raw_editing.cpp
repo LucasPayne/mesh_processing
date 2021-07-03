@@ -10,16 +10,6 @@ Vertex SurfaceMesh::add_vertex()
     return vertex;
 }
 
-Halfedge SurfaceMesh::get_halfedge(Vertex u, Vertex v)
-{
-    auto found = halfedge_map.find(std::pair<ElementIndex, ElementIndex>(u.index(), v.index()));
-    if (found == halfedge_map.end()) {
-        return Halfedge(*this, InvalidElementIndex);
-    }
-    return Halfedge(*this, found->second);
-}
-
-static std::vector<Vertex> g_add_face_vector;
 Face SurfaceMesh::add_triangle(Vertex v1, Vertex v2, Vertex v3)
 {
     log("Adding triangle.");
@@ -62,3 +52,16 @@ Face SurfaceMesh::add_triangle(Vertex v1, Vertex v2, Vertex v3)
     }
     face.set_halfedge(halfedges[0]);
 }
+
+
+// private methods
+//--------------------------------------------------------------------------------
+Halfedge SurfaceMesh::get_halfedge(Vertex u, Vertex v)
+{
+    auto found = halfedge_map.find(std::pair<ElementIndex, ElementIndex>(u.index(), v.index()));
+    if (found == halfedge_map.end()) {
+        return Halfedge(*this, InvalidElementIndex);
+    }
+    return Halfedge(*this, found->second);
+}
+

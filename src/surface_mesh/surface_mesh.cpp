@@ -172,62 +172,46 @@ void Vertex::set_halfedge(Halfedge halfedge)
 }
 
 
-
-Halfedge Edge::a() const
-{
-    return Halfedge(mesh, 2*m_index);
-}
-Halfedge Edge::b() const
-{
-    return Halfedge(mesh, 2*m_index + 1);
-}
-Halfedge Edge::halfedge(int index) const
-{
-    assert(index == 0 || index == 1);
-    return Halfedge(mesh, 2*m_index + index);
-}
-
 Halfedge Halfedge::next() const
 {
-    return Halfedge(mesh, mesh.edge_incidence_data[*this].next_index);
+    return Halfedge(mesh, mesh.halfedge_incidence_data[*this].next_index);
 }
 Vertex Halfedge::vertex() const
 {
-    return Vertex(mesh, mesh.edge_incidence_data[*this].vertex_index);
+    return Vertex(mesh, mesh.halfedge_incidence_data[*this].vertex_index);
 }
 Vertex Halfedge::tip() const
 {
-    return flip().vertex();
+    return twin().vertex();
+}
+Vertex Halfedge::twin() const {
+    return Halfedge(mesh, mesh.halfedge_incidence_data[*this].twin_index);
 }
 
-Halfedge Halfedge::flip() const
-{
-    // printf("Flipping %u to %u\n", m_index, m_index ^ 1);getchar();
-    return Halfedge(mesh, m_index ^ 1);
-}
+
 void Halfedge::set_vertex(Vertex vertex)
 {
-    mesh.edge_incidence_data[*this].vertex_index = vertex.index();
+    mesh.halfedge_incidence_data[*this].vertex_index = vertex.index();
 }
 void Halfedge::set_face(Face face)
 {
-    mesh.edge_incidence_data[*this].face_index = face.index();
+    mesh.halfedge_incidence_data[*this].face_index = face.index();
 }
 void Halfedge::set_next(Halfedge halfedge)
 {
-    mesh.edge_incidence_data[*this].next_index = halfedge.index();
+    mesh.halfedge_incidence_data[*this].next_index = halfedge.index();
 }
 
 bool Halfedge::is_boundary()
 {
-    return flip().face().null();
+    return twin().face().null();
 }
 
 
 
 Face Halfedge::face() const
 {
-    return Face(mesh, mesh.edge_incidence_data[*this].face_index);
+    return Face(mesh, mesh.halfedge_incidence_data[*this].face_index);
 }
 
 Halfedge Face::halfedge() const
@@ -257,7 +241,7 @@ int Face::num_vertices()
 --------------------------------------------------------------------------------*/
 SurfaceMesh::SurfaceMesh() :
     vertex_incidence_data(*this),
-    edge_incidence_data(*this),
+    halfedge_incidence_data(*this),
     face_incidence_data(*this)
 {
     log("Creating surface mesh.");
