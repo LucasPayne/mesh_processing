@@ -2,7 +2,9 @@
 #include "logging.h"
 #include <algorithm>//reverse
 
-// Topology.
-bool SurfaceMesh::check_topology() const
+bool SurfaceMesh::check_topology()
 {
+    for (auto he : halfedges()) {
+        
+    }
 }

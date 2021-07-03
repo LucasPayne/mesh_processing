@@ -120,18 +120,10 @@ public:
 };
 
 
-
 template <typename T>
-struct HalfedgeDataPair {
-    T halfedges[2];
-};
-template <typename T>
-class EdgeAttachment : public ElementAttachment<HalfedgeDataPair<T>> {
+class EdgeAttachment : public ElementAttachment<T> {
 public:
     EdgeAttachment(SurfaceMesh &mesh);
-    // Edge handles access to pairs of the T data, one for each associated halfedge.
-    HalfedgeDataPair<T> &operator[](const Edge &edge);
-    // Halfedge handles access the template parameter type T.
     T &operator[](const Halfedge &halfedge);
 };
 
@@ -159,6 +151,7 @@ struct HalfedgeIncidenceData {
     ElementIndex next_index;
     ElementIndex vertex_index;
     ElementIndex face_index;
+    ElementIndex twin_index;
 };
 
 
@@ -186,9 +179,6 @@ extern SurfaceMesh g_dummy_surface_mesh;
 class Vertex : public ElementHandle {
 public:
     Halfedge halfedge() const;
-    Vertex(SurfaceMesh &_mesh, ElementIndex _index) :
-        ElementHandle(_mesh, _index)
-    {}
     Vertex() :
         ElementHandle(g_dummy_surface_mesh, InvalidElementIndex)
     {}
@@ -197,6 +187,9 @@ public:
     // bool is_boundary();
 
 private:
+    Vertex(SurfaceMesh &_mesh, ElementIndex _index) :
+        ElementHandle(_mesh, _index)
+    {}
     void set_halfedge(Halfedge halfedge);
 
     friend class SurfaceMesh;
@@ -207,13 +200,13 @@ public:
     Halfedge a() const;
     Halfedge b() const;
     Halfedge halfedge(int index) const;
-    Edge(SurfaceMesh &_mesh, ElementIndex _index) :
-        ElementHandle(_mesh, _index)
-    {}
     Edge() :
         ElementHandle(g_dummy_surface_mesh, InvalidElementIndex)
     {}
 private:
+    Edge(SurfaceMesh &_mesh, ElementIndex _index) :
+        ElementHandle(_mesh, _index)
+    {}
     friend class SurfaceMesh;
 };
 
@@ -226,16 +219,18 @@ public:
     Vertex tip() const;
     Face face() const;
     bool is_boundary();
-    Halfedge(SurfaceMesh &_mesh, ElementIndex _index) :
-        ElementHandle(_mesh, _index)
-    {}
     Halfedge() :
         ElementHandle(g_dummy_surface_mesh, InvalidElementIndex)
     {}
 private:
+    Halfedge(SurfaceMesh &_mesh, ElementIndex _index) :
+        ElementHandle(_mesh, _index)
+    {}
     void set_vertex(Vertex vertex);
     void set_face(Face face);
     void set_next(Halfedge halfedge);
+    void set_twin(Halfedge halfedge);
+
     friend class SurfaceMesh;
 };
 
@@ -245,13 +240,13 @@ public:
     Halfedge halfedge() const;
     int num_vertices();
 
-    Face(SurfaceMesh &_mesh, ElementIndex _index) :
-        ElementHandle(_mesh, _index)
-    {}
     Face() :
         ElementHandle(g_dummy_surface_mesh, InvalidElementIndex)
     {}
 private:
+    Face(SurfaceMesh &_mesh, ElementIndex _index) :
+        ElementHandle(_mesh, _index)
+    {}
     void set_halfedge(Halfedge halfedge);
     friend class SurfaceMesh;
 };
@@ -282,8 +277,7 @@ public:
     // These do not necessarily maintain invariants.
     Vertex add_vertex();
     Face add_triangle(Vertex v1, Vertex v2, Vertex v3);
-    Face add_face(std::vector<Vertex> &vertices, bool been_flipped = false);
-    Halfedge add_halfedge(Vertex u, Vertex v);
+    // Face add_face(std::vector<Vertex> &vertices, bool been_flipped = false);
 
     // Euler editing methods.
     // These maintain manifoldness.
@@ -291,9 +285,9 @@ public:
 
     // Raw editing methods will invalidate the topology. check_topology() must be called to re-verify
     // topological correctness.
-    bool check_topology() const;
+    bool check_topology();
     // assert_topology does the same as check_topology, but gives an error if the topology is not correct.
-    inline void assert_topology() const {
+    inline void assert_topology() {
         assert(check_topology());
     };
 
@@ -326,8 +320,8 @@ public:
     ElementContainer<Vertex> vertices() {
         return ElementContainer<Vertex>(this, &vertex_pool);
     }
-    ElementContainer<Edge> edges() {
-        return ElementContainer<Edge>(this, &edge_pool);
+    ElementContainer<Halfedge> halfedges() {
+        return ElementContainer<Edge>(this, &halfedge_pool);
     }
     ElementContainer<Face> faces() {
         return ElementContainer<Face>(this, &face_pool);
@@ -336,13 +330,14 @@ public:
 private:
     // Mesh element storage.
     // An ElementPool only keeps a small amount of data on available element IDs,
-    // and
+    // and references to attachments.
     ElementPool vertex_pool;
-    ElementPool edge_pool;
+    ElementPool halfedge_pool;
     ElementPool face_pool;
     // Incidence information is stored as a collection of functions of the elements (called "attachments").
+    // These are attached to the relevant ElementPools.
     VertexAttachment<VertexIncidenceData> vertex_incidence_data;
-    EdgeAttachment<HalfedgeIncidenceData> edge_incidence_data;
+    HalfedgeAttachment<HalfedgeIncidenceData> halfedge_incidence_data;
     FaceAttachment<FaceIncidenceData> face_incidence_data;
 
     //---
@@ -350,13 +345,14 @@ private:
 
     
 
+    Halfedge add_halfedge(Vertex u, Vertex v);
 
     template <typename T>
     friend class ElementAttachment;
     template <typename T>
     friend class VertexAttachment;
     template <typename T>
-    friend class EdgeAttachment;
+    friend class HalfedgeAttachment;
     template <typename T>
     friend class FaceAttachment;
 
@@ -366,7 +362,7 @@ private:
     friend class Face;
 
     friend class ElementIterator<Vertex>;
-    friend class ElementIterator<Edge>;
+    friend class ElementIterator<Halfedge>;
     friend class ElementIterator<Face>;
 };
 
