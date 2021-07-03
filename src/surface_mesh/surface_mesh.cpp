@@ -262,31 +262,6 @@ SurfaceMesh::SurfaceMesh() :
 {
     log("Creating surface mesh.");
 }
-
-
-Vertex SurfaceMesh::add_vertex()
-{
-    log("Adding vertex.");
-    auto vertex = Vertex(*this, vertex_pool.add());
-    auto &vertex_incidence = vertex_incidence_data[vertex];
-    vertex_incidence.halfedge_index = InvalidElementIndex;
-    return vertex;
-}
-
-Halfedge SurfaceMesh::add_halfedge(Vertex u, Vertex v)
-{
-    auto edge = Edge(*this, edge_pool.add());
-    // This is the only connectivity information known by this method.
-    // The caller must set up the rest of the incidence relations.
-    // printf("%u %u %u\n", edge.index(), edge.a().index(), edge.b().index());
-    edge.a().set_vertex(u);
-    edge.b().set_vertex(v);
-
-    halfedge_map[std::pair<ElementIndex, ElementIndex>(u.index(), v.index())] = edge.a().index();
-    halfedge_map[std::pair<ElementIndex, ElementIndex>(v.index(), u.index())] = edge.b().index();
-
-    return edge.a();
-}
 Halfedge SurfaceMesh::get_halfedge(Vertex u, Vertex v)
 {
     auto found = halfedge_map.find(std::pair<ElementIndex, ElementIndex>(u.index(), v.index()));

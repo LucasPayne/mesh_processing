@@ -8,8 +8,15 @@ find_package(Eigen3 REQUIRED)
 include_directories(. include ${EIGEN3_INCLUDE_DIR})
 
 add_library(mesh_processing
+    # SurfaceMesh data structure.
     src/surface_mesh/surface_mesh.cpp
+    src/surface_mesh/raw_editing.cpp
+    src/surface_mesh/topology.cpp
+    src/surface_mesh/euler_editing.cpp
+
+    # SurfaceGeometry data structure (simple wrapper to SurfaceMesh which gives vertex positions by default).
     src/surface_geometry/surface_geometry.cpp
+
     # Enmesh mesh generation sublibrary.
     src/enmesh/grid.cpp
     src/enmesh/io.cpp

@@ -2,6 +2,27 @@
 #include "logging.h"
 #include <algorithm>//reverse
 
+Vertex SurfaceMesh::add_vertex()
+{
+    auto vertex = Vertex(*this, vertex_pool.add());
+    auto &vertex_incidence = vertex_incidence_data[vertex];
+    vertex_incidence.halfedge_index = InvalidElementIndex;
+    return vertex;
+}
+
+Halfedge SurfaceMesh::add_halfedge(Vertex u, Vertex v)
+{
+    assert(u != v);
+    auto edge = Edge(*this, edge_pool.add());
+    edge.a().set_vertex(u);
+    edge.b().set_vertex(v);
+
+    halfedge_map[std::pair<ElementIndex, ElementIndex>(u.index(), v.index())] = edge.a().index();
+    halfedge_map[std::pair<ElementIndex, ElementIndex>(v.index(), u.index())] = edge.b().index();
+
+    return edge.a();
+}
+
 
 static std::vector<Vertex> g_add_face_vector;
 Face SurfaceMesh::add_triangle(Vertex v1, Vertex v2, Vertex v3)

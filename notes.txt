@@ -11,3 +11,9 @@ Euler operations.
 Maintain manifoldness. Might have to check when editing boundary.
 
 
+Halfedge attachment.
+By default implement chains and oriented faces.
+This will make construction of meshes easier, and finding the boundary will just consist of finding
+half-edges which don't have an opposite.
+
+
