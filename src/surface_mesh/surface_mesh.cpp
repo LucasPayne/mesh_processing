@@ -176,6 +176,10 @@ Halfedge Halfedge::next() const
 {
     return Halfedge(mesh, mesh.halfedge_incidence_data[*this].next_index);
 }
+Halfedge Halfedge::twin() const {
+    return Halfedge(mesh, mesh.halfedge_incidence_data[*this].twin_index);
+}
+
 Vertex Halfedge::vertex() const
 {
     return Vertex(mesh, mesh.halfedge_incidence_data[*this].vertex_index);
@@ -184,10 +188,6 @@ Vertex Halfedge::tip() const
 {
     return twin().vertex();
 }
-Vertex Halfedge::twin() const {
-    return Halfedge(mesh, mesh.halfedge_incidence_data[*this].twin_index);
-}
-
 
 void Halfedge::set_vertex(Vertex vertex)
 {
@@ -201,6 +201,11 @@ void Halfedge::set_next(Halfedge halfedge)
 {
     mesh.halfedge_incidence_data[*this].next_index = halfedge.index();
 }
+void Halfedge::set_twin(Halfedge halfedge)
+{
+    mesh.halfedge_incidence_data[*this].twin_index = halfedge.index();
+}
+
 
 bool Halfedge::is_boundary()
 {
@@ -246,29 +251,14 @@ SurfaceMesh::SurfaceMesh() :
 {
     log("Creating surface mesh.");
 }
-Halfedge SurfaceMesh::get_halfedge(Vertex u, Vertex v)
-{
-    auto found = halfedge_map.find(std::pair<ElementIndex, ElementIndex>(u.index(), v.index()));
-    if (found == halfedge_map.end()) {
-        return Halfedge(*this, InvalidElementIndex);
-    }
-    return Halfedge(*this, found->second);
-    // auto start = u.halfedge();
-    // auto he = start;
-    // while (!he.null()) {
-    //     he = he.flip().next();
-    //     if (he == start) break;
-    // }
-    // return he;
-}
 
 size_t SurfaceMesh::num_vertices() const
 {
     return vertex_pool.num_elements();
 }
-size_t SurfaceMesh::num_edges() const
+size_t SurfaceMesh::num_halfedges() const
 {
-    return edge_pool.num_elements();
+    return halfedge_pool.num_elements();
 }
 size_t SurfaceMesh::num_faces() const
 {
@@ -286,8 +276,8 @@ void SurfaceMesh::printout()
     printf("------------------------------------------------------------\n");
     printf("vertex_pool\n");
     vertex_pool.printout();
-    printf("edge_pool\n");
-    edge_pool.printout();
+    printf("halfedge_pool\n");
+    halfedge_pool.printout();
     printf("face_pool\n");
     face_pool.printout();
     printf("============================================================\n");

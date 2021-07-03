@@ -182,13 +182,12 @@ public:
         ElementHandle(g_dummy_surface_mesh, InvalidElementIndex)
     {}
 
-    // Returns true if this vertex has no cycle among its neighbours.
-    // bool is_boundary();
-
-private:
+    //todo: Hide from public interface.
     Vertex(SurfaceMesh &_mesh, ElementIndex _index) :
         ElementHandle(_mesh, _index)
     {}
+
+private:
     void set_halfedge(Halfedge halfedge);
 
     friend class SurfaceMesh;
@@ -198,7 +197,7 @@ private:
 class Halfedge : public ElementHandle {
 public:
     Halfedge next() const;
-    Halfedge flip() const;
+    Halfedge twin() const;
     Vertex vertex() const;
     Vertex tip() const;
     Face face() const;
@@ -206,10 +205,11 @@ public:
     Halfedge() :
         ElementHandle(g_dummy_surface_mesh, InvalidElementIndex)
     {}
-private:
+    //todo: Hide from public interface.
     Halfedge(SurfaceMesh &_mesh, ElementIndex _index) :
         ElementHandle(_mesh, _index)
     {}
+private:
     void set_vertex(Vertex vertex);
     void set_face(Face face);
     void set_next(Halfedge halfedge);
@@ -227,10 +227,11 @@ public:
     Face() :
         ElementHandle(g_dummy_surface_mesh, InvalidElementIndex)
     {}
-private:
+    //todo: Hide from public interface.
     Face(SurfaceMesh &_mesh, ElementIndex _index) :
         ElementHandle(_mesh, _index)
     {}
+private:
     void set_halfedge(Halfedge halfedge);
     friend class SurfaceMesh;
 };
@@ -277,10 +278,9 @@ public:
 
 
 
-    Halfedge get_halfedge(Vertex u, Vertex v);
     // Counting elements.
     size_t num_vertices() const;
-    size_t num_edges() const;
+    size_t num_halfedges() const;
     size_t num_faces() const;
 
     void printout();
@@ -324,9 +324,11 @@ private:
     HalfedgeAttachment<HalfedgeIncidenceData> halfedge_incidence_data;
     FaceAttachment<FaceIncidenceData> face_incidence_data;
 
-    //---
+    // Map from pairs of vertex indices to halfedge indices.
+    // get_halfedge is used to test if there is already a halfedge between two vertices,
+    // and when setting up twin incidence relations.
     std::map<std::pair<ElementIndex, ElementIndex>, ElementIndex> halfedge_map; //vertices to halfedge.
-
+    Halfedge get_halfedge(Vertex u, Vertex v);
     
     template <typename T>
     friend class ElementAttachment;

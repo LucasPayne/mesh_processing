@@ -66,7 +66,7 @@ void ElementAttachment<T>::destroy(ElementIndex element_index)
 
 
 /*--------------------------------------------------------------------------------
-    Vertex, Edge, and Face element attachment template methods.
+    Vertex, Halfedge, and Face element attachment template methods.
 --------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------
     VertexAttachment
@@ -84,24 +84,17 @@ T &VertexAttachment<T>::operator[](const Vertex &vertex)
 
 
 /*--------------------------------------------------------------------------------
-    EdgeAttachment
+    HalfedgeAttachment
 --------------------------------------------------------------------------------*/
 template <typename T>
-EdgeAttachment<T>::EdgeAttachment(SurfaceMesh &mesh) :
-    ElementAttachment<HalfedgeDataPair<T>>(mesh.edge_pool)
+HalfedgeAttachment<T>::HalfedgeAttachment(SurfaceMesh &mesh) :
+    ElementAttachment<T>(mesh.halfedge_pool)
 {}
 
 template <typename T>
-HalfedgeDataPair<T> &EdgeAttachment<T>::operator[](const Edge &edge)
+T &HalfedgeAttachment<T>::operator[](const Halfedge &halfedge)
 {
-    return this->get(edge.index());
-}
-
-template <typename T>
-T &EdgeAttachment<T>::operator[](const Halfedge &halfedge)
-{
-    auto he_index = halfedge.index() / 2;
-    return this->get(he_index).halfedges[halfedge.index() % 2];
+    return this->get(halfedge.index());
 }
 
 
