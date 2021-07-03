@@ -12,8 +12,13 @@ int main(void)
     auto v2 = quad.add_vertex();
     auto v3 = quad.add_vertex();
     auto v4 = quad.add_vertex();
+    printf("%d %d %d %d\n", v1.index(),v2.index(),v3.index(),v4.index());
+    getchar();
+
+    quad.add_triangle(v1, v2, v3);
     quad.add_triangle(v1, v3, v4);
-    quad.add_triangle(v1, v4, v2);
+
+    quad.lock_topology();
 
     // auto grid = Enmesh::grid_mesh(10, 10);
 

@@ -186,7 +186,7 @@ Vertex Halfedge::vertex() const
 }
 Vertex Halfedge::tip() const
 {
-    return twin().vertex();
+    return next().vertex();
 }
 
 void Halfedge::set_vertex(Vertex vertex)

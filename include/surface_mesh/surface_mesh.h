@@ -267,15 +267,12 @@ public:
     // Euler editing methods.
     // These maintain manifoldness.
 
-
-    // Raw editing methods will invalidate the topology. check_topology() must be called to re-verify
-    // topological correctness.
-    bool check_topology();
-    // assert_topology does the same as check_topology, but gives an error if the topology is not correct.
-    inline void assert_topology() {
-        assert(check_topology());
-    };
-
+    // Topology.
+    void lock_topology();
+    void unlock_topology();
+    // Boundary.
+    std::vector<Halfedge> boundary_loops();
+    size_t num_boundary_loops() const;
 
 
     // Counting elements.
@@ -329,6 +326,10 @@ private:
     // and when setting up twin incidence relations.
     std::map<std::pair<ElementIndex, ElementIndex>, ElementIndex> halfedge_map; //vertices to halfedge.
     Halfedge get_halfedge(Vertex u, Vertex v);
+
+
+    // Private topology data.
+    std::vector<Halfedge> m_boundary_loops;
     
     template <typename T>
     friend class ElementAttachment;
