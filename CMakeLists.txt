@@ -15,14 +15,17 @@ add_library(mesh_processing
     src/surface_mesh/euler_editing.cpp
 
     # SurfaceGeometry data structure (simple wrapper to SurfaceMesh which gives vertex positions by default).
-    # src/surface_geometry/surface_geometry.cpp
+    src/surface_geometry/surface_geometry.cpp
 
     # Enmesh mesh generation sublibrary.
-    # src/enmesh/grid.cpp
-    # src/enmesh/io.cpp
+    src/enmesh/grid.cpp
+    src/enmesh/io.cpp
 )
 target_compile_options(mesh_processing PRIVATE -Wall -g)
 
 # Compile example applications
 add_executable(simple1 examples/simple1/simple1.cpp)
 target_link_libraries(simple1 mesh_processing)
+
+add_executable(simple2 examples/simple2/simple2.cpp)
+target_link_libraries(simple2 mesh_processing)

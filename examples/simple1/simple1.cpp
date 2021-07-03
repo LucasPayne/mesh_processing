@@ -19,6 +19,13 @@ int main(void)
     quad.add_triangle(v1, v3, v4);
 
     quad.lock_topology();
+    for (auto start : quad.boundary_loops()) {
+        printf("Loop\n");
+        auto he = start;
+        do {
+            printf("%d\n", he.vertex().index());
+        } while ((he = he.next()) != start);
+    }
 
     // auto grid = Enmesh::grid_mesh(10, 10);
 

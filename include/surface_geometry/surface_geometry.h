@@ -20,11 +20,11 @@ public:
     {}
 
     SurfaceMesh::ElementContainer<Vertex> vertices() { return mesh.vertices(); }
-    SurfaceMesh::ElementContainer<Edge> edges() { return mesh.edges(); }
+    SurfaceMesh::ElementContainer<Halfedge> edges() { return mesh.halfedges(); }
     SurfaceMesh::ElementContainer<Face> faces() { return mesh.faces(); }
 
     size_t num_vertices() const { return mesh.num_vertices(); }
-    size_t num_edges() const { return mesh.num_edges(); }
+    size_t num_halfedges() const { return mesh.num_halfedges(); }
     size_t num_faces() const { return mesh.num_faces(); }
 
     void printout();
