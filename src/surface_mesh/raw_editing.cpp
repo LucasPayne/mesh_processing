@@ -50,7 +50,7 @@ Face SurfaceMesh::add_face(Vertex *vertices, int num_vertices)
 
         // Attach to source vertex.
         he.set_vertex(u);
-        u.set_halfedge(he); //todo: maybe need to think about the boundary case
+        // note: vertex->halfedge incidences are not valid in an unlocked mesh. They are only computed when the mesh is locked.
     }
     // Connect the halfedges up into a loop.
     for (int i = 0; i < num_vertices; i++) {
@@ -75,6 +75,7 @@ bool SurfaceMesh::remove_vertex(Vertex vertex)
     // Can only remove an isolated vertex.
     assert(vertex.halfedge().null());
     vertex_pool.remove(vertex.index());
+    printf("Removed vertex\n");
     return true;
 }
 
@@ -106,6 +107,7 @@ bool SurfaceMesh::remove_face(Face face)
 
     face_pool.remove(face.index());
 
+    printf("Removed face\n");
     return true;
 }
 

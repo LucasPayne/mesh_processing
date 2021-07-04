@@ -22,10 +22,12 @@ void SurfaceMesh::lock()
     // "Unlocked":
     //     - Halfedges do not need to have twins.
     //     - A boundary halfedge is known by the fact that twin() is null.
+    //     - Vertex->halfedge incidences are not valid.
     // "Locked":
     //     - Has a list of boundary halfedges, one for each boundary loop.
     //     - Boundary halfedges form a next() loop around the boundary "face", although the face() is null.
     //     - A boundary halfedge is known by the fact that face() is null.
+    //     - Vertex->halfedge incidences have been set up for mesh traversal.
 
     HalfedgeAttachment<char> visited(*this); //note: Something goes wrong with bool (maybe because std::vector<bool> is actually a different data structure).
     for (auto he : halfedges()) {
@@ -34,7 +36,7 @@ void SurfaceMesh::lock()
 
     std::vector<std::vector<Halfedge>> loops(0);
     
-    // Look for a starting halfedges to form boundary loops.
+    // Look for starting halfedges to form boundary loops.
     for (auto start : halfedges()) {
         if (start.twin().null() && !visited[start]) {
             // start is on an unvisited boundary loop.
@@ -78,7 +80,6 @@ void SurfaceMesh::lock()
             size_t prev_i = i>0 ? i-1 : loop.size()-1;
             boundary_halfedges[i].set_next(boundary_halfedges[prev_i]);
         }
-        std::cout << boundary_halfedges.size() << "\n";
         m_boundary_loops.push_back(boundary_halfedges[0]); // (The first boundary halfedge is the beginning of iterations around the boundary.)
     }
 
@@ -86,8 +87,15 @@ void SurfaceMesh::lock()
     //------------------------------------------------------------
     // A non-manifold vertex has disjoint triangle fans.
     // Consider a mesh of two triangles meeting at one vertex. The computed boundary loops will be disjoint,
-    // as traversal from the perspective of triangle 1 was restricted to triangle 1. Therefore we have two boundary loops
-    // with a common vertex. This is a sufficient condition for this vertex to be non-manifold.
+    // as traversal from the perspective of triangle 1 was restricted to triangle 1.
+    //      |\    /|
+    //      | \  / |
+    //      |  \/  |
+    //      |  /\  |
+    //      | /  \ |
+    //      |/    \|
+    // Therefore we have two boundary loops with a common vertex.
+    // This is a sufficient condition for this vertex to be non-manifold.
     // Consider a mesh that looks like
     //      ---------
     //      | |~~~\ |
@@ -97,9 +105,6 @@ void SurfaceMesh::lock()
     //      ---------
     // This is another sufficient condition for that vertex to be non-manifold.
     // These two conditions are necessary and sufficient. (todo: Need to properly prove this).
-    
-    std::cout << "loops size: " << loops.size() << "\n";
-    
     VertexAttachment<char> vertex_visited(*this);
     for (auto v : vertices()) {
         vertex_visited[v] = false;
@@ -112,6 +117,27 @@ void SurfaceMesh::lock()
                 exit(EXIT_FAILURE);
             }
             vertex_visited[he.vertex()] = true;
+        } while ((he = he.next()) != start);
+    }
+
+    //------------------------------------------------------------
+    // By now, the mesh has been topologically verified.
+    //------------------------------------------------------------
+    // Add vertex->halfedge incidences.
+    for (auto v : vertices()) {
+        vertex_visited[v] = false; // re-use this attachment.
+    }
+    // For each face, for all vertices on this face which have not had their halfedge set,
+    // set it to the relevant halfedge on this face.
+    // (This is a somewhat arbitrary choice. Each vertex needs just any of its outgoing halfedges.)
+    for (auto face : faces()) {
+        auto start = face.halfedge();
+        auto he = start;
+        do {
+            if (!vertex_visited[he.vertex()]) {
+                he.vertex().set_halfedge(he);
+                vertex_visited[he.vertex()] = true;
+            }
         } while ((he = he.next()) != start);
     }
 

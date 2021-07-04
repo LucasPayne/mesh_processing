@@ -177,7 +177,7 @@ protected:
 extern SurfaceMesh g_dummy_surface_mesh;
 class Vertex : public ElementHandle {
 public:
-    Halfedge halfedge() const;
+    Halfedge halfedge() const; // Only valid when the mesh is locked (single vertex->halfedge relations don't give full traversals for unlocked (non-manifold) meshes.)
     Vertex() :
         ElementHandle(g_dummy_surface_mesh, InvalidElementIndex)
     {}

@@ -162,6 +162,13 @@ ElementAttachmentBase::ElementAttachmentBase(size_t _type_size) :
 
 Halfedge Vertex::halfedge() const
 {
+    // Not valid when mesh is unlocked.
+    //   (Unlocked meshes don't have full half-edge data, so vertex->halfedge relations don't give full information for traversal.
+    //    It is simpler to just not expect valid vertex incidences, and set them up only when the mesh is locked.)
+    if (!mesh.locked()) {
+        std::cerr << "mesh traversal error: vertex->halfedge traversal is only valid when the mesh is locked.\n";
+        exit(EXIT_FAILURE);
+    }
     return Halfedge(mesh, mesh.vertex_incidence_data[*this].halfedge_index);
 }
 void Vertex::set_halfedge(Halfedge halfedge)
