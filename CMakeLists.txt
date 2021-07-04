@@ -1,8 +1,13 @@
 cmake_minimum_required(VERSION 3.1.0)
 project(mesh_processing)
 
-set(EIGEN3_INCLUDE_DIR "usr/include/eigen3")
 
+# Compilation/extension options.
+set(build_extension_assimp_convert YES)
+set(ASSIMP_SOURCE_DIR "~/computer_graphics/assimp/") #<----Set this to the source directory of the above is set to YES.
+
+
+set(EIGEN3_INCLUDE_DIR "usr/include/eigen3")
 find_package(Eigen3 REQUIRED)
 
 include_directories(. include ${EIGEN3_INCLUDE_DIR})
@@ -23,9 +28,17 @@ add_library(mesh_processing
 )
 target_compile_options(mesh_processing PRIVATE -Wall -g)
 
+
 # Compile example applications
 add_executable(simple1 examples/simple1/simple1.cpp)
 target_link_libraries(simple1 mesh_processing)
 
 add_executable(simple2 examples/simple2/simple2.cpp)
 target_link_libraries(simple2 mesh_processing)
+
+
+# Build extensions.
+if(build_extension_assimp_convert)
+    add_subdirectory(extensions/assimp_convert)
+    target_link_libraries(mesh_processing assimp_convert)
+endif()

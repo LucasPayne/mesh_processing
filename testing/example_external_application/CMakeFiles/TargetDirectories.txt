@@ -1,0 +1,3 @@
+/home/lucas/computer_graphics/mesh_processing/testing/example_external_application/CMakeFiles/rebuild_cache.dir
+/home/lucas/computer_graphics/mesh_processing/testing/example_external_application/CMakeFiles/example_external_application.dir
+/home/lucas/computer_graphics/mesh_processing/testing/example_external_application/CMakeFiles/edit_cache.dir

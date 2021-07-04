@@ -13,13 +13,11 @@ simply include mesh_processing.h and link against the compiled library.
 
 # Dependencies
 -----------------------
-[Eigen3 (C++ header-only linear algebra library)](https://gitlab.com/libeigen/eigen)
-
-(Update CMakeLists.txt to point to the Eigen3 header files if needed.)
+[Eigen3 (C++ header-only linear algebra library. Update CMakeLists.txt to point to the Eigen3 header files if needed.)](https://gitlab.com/libeigen/eigen)
 
 # References
 -----------------------
-The half-edge mesh data structure is largely based off of the [paper](imr.sandia.gov/papers/imr20/Sieger.pdf) by Mario Botsch, Daniel Sieger, (2011), "Design, Implementation, and Evaluation of the Surface_mesh data structure".
+The half-edge mesh data structure is largely based off of the [paper](imr.sandia.gov/papers/imr20/Sieger.pdf) by Mario Botsch, Daniel Sieger, (2011), "Design, Implementation, and Evaluation of the Surface_mesh data structure". A very good mesh library based off of these same principles is [geometry-central](https://github.com/nmwsharp/geometry-central).
 
 
 ## The library

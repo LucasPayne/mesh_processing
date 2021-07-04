@@ -201,7 +201,7 @@ public:
     Vertex vertex() const;
     Vertex tip() const;
     Face face() const;
-    bool is_boundary();
+
     Halfedge() :
         ElementHandle(g_dummy_surface_mesh, InvalidElementIndex)
     {}
@@ -262,14 +262,19 @@ public:
     // These do not necessarily maintain invariants.
     Vertex add_vertex();
     Face add_triangle(Vertex v1, Vertex v2, Vertex v3);
-    // Face add_face(std::vector<Vertex> &vertices, bool been_flipped = false);
+    Face add_face(Vertex *vertices, int num_vertices);
+    Face add_face(std::vector<Vertex> &vertices);
+
+    bool remove_vertex(Vertex vertex); // Remove an isolated vertex.
+    bool remove_face(Face face); // Remove a face and all its halfedges. Vertices are unaffected.
 
     // Euler editing methods.
     // These maintain manifoldness.
 
     // Topology.
-    void lock_topology();
-    void unlock_topology();
+    bool locked() const;
+    void lock();
+    void unlock();
     // Boundary.
     std::vector<Halfedge> boundary_loops();
     size_t num_boundary_loops() const;
@@ -330,6 +335,8 @@ private:
 
     // Private topology data.
     std::vector<Halfedge> m_boundary_loops;
+    bool m_locked;
+
     
     template <typename T>
     friend class ElementAttachment;
@@ -350,6 +357,6 @@ private:
 };
 
 
-#include "surface_mesh.ipp"
+#include "mesh_processing/surface_mesh/surface_mesh.ipp"
 
 #endif // SURFACE_MESH_H

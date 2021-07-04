@@ -1,5 +1,4 @@
-#include "mesh_processing.h"
-#include "logging.h"
+#include "mesh_processing/mesh_processing.h"
 #include <algorithm>//reverse
 
 
@@ -14,7 +13,6 @@ ElementPool::ElementPool(size_t capacity) :
     m_num_elements{0}
 {
     assert(capacity > 0);
-    log("Creating new element pool of capacity %zu.", capacity);
 }
 
 size_t ElementPool::capacity() const
@@ -207,12 +205,6 @@ void Halfedge::set_twin(Halfedge halfedge)
 }
 
 
-bool Halfedge::is_boundary()
-{
-    return twin().face().null();
-}
-
-
 
 Face Halfedge::face() const
 {
@@ -247,9 +239,9 @@ int Face::num_vertices()
 SurfaceMesh::SurfaceMesh() :
     vertex_incidence_data(*this),
     halfedge_incidence_data(*this),
-    face_incidence_data(*this)
+    face_incidence_data(*this),
+    m_locked{false}
 {
-    log("Creating surface mesh.");
 }
 
 size_t SurfaceMesh::num_vertices() const
