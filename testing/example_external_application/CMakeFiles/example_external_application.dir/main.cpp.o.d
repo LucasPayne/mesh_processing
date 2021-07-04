@@ -293,4 +293,35 @@ CMakeFiles/example_external_application.dir/main.cpp.o: \
  /usr/include/c++/8/bits/stl_map.h /usr/include/c++/8/bits/stl_multimap.h \
  /home/lucas/computer_graphics/mesh_processing/testing/example_external_application/../../include/mesh_processing/surface_mesh/surface_mesh.ipp \
  /home/lucas/computer_graphics/mesh_processing/testing/example_external_application/../../include/mesh_processing/surface_geometry/surface_geometry.h \
- /home/lucas/computer_graphics/mesh_processing/testing/example_external_application/../../include/mesh_processing/enmesh/enmesh.h
+ /home/lucas/computer_graphics/mesh_processing/testing/example_external_application/../../include/mesh_processing/enmesh/enmesh.h \
+ /home/lucas/computer_graphics/mesh_processing/testing/example_external_application/../../include/mesh_processing/extensions/assimp_convert.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/Importer.hpp \
+ /home/lucas/computer_graphics/assimp/include/assimp/types.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/defs.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/config.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/vector2.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/vector3.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/color4.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/matrix3x3.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/matrix4x4.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/quaternion.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/vector2.inl \
+ /home/lucas/computer_graphics/assimp/include/assimp/vector3.inl \
+ /home/lucas/computer_graphics/assimp/include/assimp/color4.inl \
+ /home/lucas/computer_graphics/assimp/include/assimp/matrix3x3.inl \
+ /home/lucas/computer_graphics/assimp/include/assimp/matrix4x4.inl \
+ /home/lucas/computer_graphics/assimp/include/assimp/MathFunctions.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/quaternion.inl \
+ /home/lucas/computer_graphics/assimp/include/assimp/scene.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/texture.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/Compiler/pushpack1.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/Compiler/poppack1.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/mesh.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/aabb.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/light.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/camera.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/material.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/material.inl \
+ /home/lucas/computer_graphics/assimp/include/assimp/anim.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/metadata.h \
+ /home/lucas/computer_graphics/assimp/include/assimp/postprocess.h

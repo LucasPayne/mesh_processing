@@ -93,6 +93,7 @@ example_external_application_EXTERNAL_OBJECTS =
 example_external_application: CMakeFiles/example_external_application.dir/main.cpp.o
 example_external_application: CMakeFiles/example_external_application.dir/build.make
 example_external_application: ../../build/libmesh_processing.a
+example_external_application: /home/lucas/computer_graphics/assimp/bin/libassimp.so
 example_external_application: CMakeFiles/example_external_application.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/lucas/computer_graphics/mesh_processing/testing/example_external_application/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable example_external_application"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/example_external_application.dir/link.txt --verbose=$(VERBOSE)

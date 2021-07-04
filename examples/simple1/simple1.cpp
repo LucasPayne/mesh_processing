@@ -20,18 +20,21 @@ int main(void)
     // quad.remove_face(t2);
     // quad.remove_vertex(v4);
     
-    auto v_center = quad.add_vertex();
-    auto t1 = quad.add_triangle(v1, v2, v_center);
-    auto t2 = quad.add_triangle(v4, v3, v_center);
+    auto t1 = quad.add_triangle(v1, v2, v3);
+    auto t2 = quad.add_triangle(v1, v2, v4);
+    
+    // auto v_center = quad.add_vertex();
+    // auto t1 = quad.add_triangle(v1, v2, v_center);
+    // auto t2 = quad.add_triangle(v4, v3, v_center);
 
-    quad.lock();
-    for (auto start : quad.boundary_loops()) {
-        printf("Loop\n");
-        auto he = start;
-        do {
-            printf("%d\n", he.vertex().index());
-        } while ((he = he.next()) != start);
-    }
+    // quad.lock();
+    // for (auto start : quad.boundary_loops()) {
+    //     printf("Loop\n");
+    //     auto he = start;
+    //     do {
+    //         printf("%d\n", he.vertex().index());
+    //     } while ((he = he.next()) != start);
+    // }
 
     // auto grid = Enmesh::grid_mesh(10, 10);
 

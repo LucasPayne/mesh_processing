@@ -10,10 +10,14 @@ SurfaceGeometry assimp_to_surface_geometry(const std::string &filename)
     assert(scene);
     assert(scene->mNumMeshes > 0);
 
+    printf("num meshes: %d\n", scene->mNumMeshes);
 
     SurfaceGeometry geom;
     for (int mesh_index = 0; mesh_index < scene->mNumMeshes; mesh_index++) {
         aiMesh *mesh = scene->mMeshes[mesh_index];
+        printf("num vertices: %d\n", mesh->mNumVertices);
+        printf("num faces: %d\n", mesh->mNumFaces);
+
         std::vector<Vertex> vertex_list(mesh->mNumVertices);
         for (int vertex_index = 0; vertex_index < mesh->mNumVertices; vertex_index++) {
             auto &position = mesh->mVertices[vertex_index];

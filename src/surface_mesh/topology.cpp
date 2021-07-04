@@ -32,7 +32,7 @@ void SurfaceMesh::lock()
         visited[he] = false; //todo: It would be convenient to have default values for attachments.
     }
 
-    std::vector<std::vector<Halfedge>> loops;
+    std::vector<std::vector<Halfedge>> loops(0);
     
     // Look for a starting halfedges to form boundary loops.
     for (auto start : halfedges()) {
@@ -78,6 +78,7 @@ void SurfaceMesh::lock()
             size_t prev_i = i>0 ? i-1 : loop.size()-1;
             boundary_halfedges[i].set_next(boundary_halfedges[prev_i]);
         }
+        std::cout << boundary_halfedges.size() << "\n";
         m_boundary_loops.push_back(boundary_halfedges[0]); // (The first boundary halfedge is the beginning of iterations around the boundary.)
     }
 
@@ -96,6 +97,9 @@ void SurfaceMesh::lock()
     //      ---------
     // This is another sufficient condition for that vertex to be non-manifold.
     // These two conditions are necessary and sufficient. (todo: Need to properly prove this).
+    
+    std::cout << "loops size: " << loops.size() << "\n";
+    
     VertexAttachment<char> vertex_visited(*this);
     for (auto v : vertices()) {
         vertex_visited[v] = false;

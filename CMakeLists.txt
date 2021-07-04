@@ -4,7 +4,7 @@ project(mesh_processing)
 
 # Compilation/extension options.
 set(build_extension_assimp_convert YES)
-set(ASSIMP_SOURCE_DIR "~/computer_graphics/assimp/") #<----Set this to the source directory of the above is set to YES.
+set(ASSIMP_INCLUDE_DIR /home/lucas/computer_graphics/assimp/include) #<----Set this to the correct directory if the above is set to YES.
 
 
 set(EIGEN3_INCLUDE_DIR "usr/include/eigen3")
@@ -12,7 +12,7 @@ find_package(Eigen3 REQUIRED)
 
 include_directories(. include ${EIGEN3_INCLUDE_DIR})
 
-add_library(mesh_processing
+add_library(mesh_processing STATIC
     # SurfaceMesh data structure.
     src/surface_mesh/surface_mesh.cpp
     src/surface_mesh/raw_editing.cpp
@@ -29,16 +29,21 @@ add_library(mesh_processing
 target_compile_options(mesh_processing PRIVATE -Wall -g)
 
 
+# Build extensions.
+if(build_extension_assimp_convert)
+    message(STATUS "Linking extension assimp_convert")
+    include_directories(${ASSIMP_INCLUDE_DIR})
+    add_library(assimp_convert OBJECT
+        extensions/assimp_convert/assimp_convert.cpp
+    )
+    set_property(TARGET assimp_convert PROPERTY POSITION_INDEPENDENT_CODE ON)
+    target_link_libraries(mesh_processing assimp_convert)
+endif()
+
+
 # Compile example applications
 add_executable(simple1 examples/simple1/simple1.cpp)
 target_link_libraries(simple1 mesh_processing)
 
 add_executable(simple2 examples/simple2/simple2.cpp)
 target_link_libraries(simple2 mesh_processing)
-
-
-# Build extensions.
-if(build_extension_assimp_convert)
-    add_subdirectory(extensions/assimp_convert)
-    target_link_libraries(mesh_processing assimp_convert)
-endif()
