@@ -5,12 +5,12 @@
 
 int main(void)
 {
-    SurfaceGeometry geom = assimp_to_surface_geometry("Tangram-6.stl");
-    std::cout << geom.num_vertices() << "\n";
-    std::cout << geom.num_faces() << "\n";
+    SurfaceGeometry *geom = assimp_to_surface_geometry("Tangram-6.stl");
+    std::cout << geom->num_vertices() << "\n";
+    std::cout << geom->num_faces() << "\n";
     getchar();
 
-    std::cout << geom.mesh.num_boundary_loops() << "\n";
+    std::cout << geom->mesh.num_boundary_loops() << "\n";
 
     geom.mesh.lock();
     

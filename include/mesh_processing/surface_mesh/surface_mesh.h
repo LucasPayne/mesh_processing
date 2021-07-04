@@ -258,6 +258,10 @@ class SurfaceMesh {
 public:
     SurfaceMesh();
 
+    // Copy assignment.
+    SurfaceMesh &operator=(const SurfaceMesh &other);
+
+
     // Raw editing methods.
     // These do not necessarily maintain invariants.
     Vertex add_vertex();

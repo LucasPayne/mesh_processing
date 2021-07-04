@@ -17,12 +17,6 @@ By default implement chains and oriented faces.
 This will make construction of meshes easier, and finding the boundary will just consist of finding
 half-edges which don't have an opposite.
 
-
-
 Non-manifold (unlocked) mesh
 Non-manifold vertex neighbours
 Face removal needs this
-
-Is "locked and unlocked" manifoldness useful?
-Why not assume that a manifold will be constructed fully from a list of polygons?
-It still seems useful to use SurfaceMesh to process non-manifold meshes.

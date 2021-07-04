@@ -8,6 +8,6 @@
 #include <algorithm>
 #include <limits>
 
-SurfaceGeometry assimp_to_surface_geometry(const std::string &filename);
+SurfaceGeometry *assimp_to_surface_geometry(const std::string &filename);
 
 #endif // MESH_PROCESSING_ASSIMP_CONVERT_H

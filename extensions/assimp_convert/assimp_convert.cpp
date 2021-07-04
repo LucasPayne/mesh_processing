@@ -2,7 +2,7 @@
 #include "mesh_processing/extensions/assimp_convert.h"
 
 
-SurfaceGeometry assimp_to_surface_geometry(const std::string &filename)
+SurfaceGeometry *assimp_to_surface_geometry(const std::string &filename)
 {
     Assimp::Importer importer;
     auto flags = aiProcess_DropNormals | aiProcess_JoinIdenticalVertices; // see the assimp postprocess.h header for explanation of DropNormals.
@@ -10,14 +10,14 @@ SurfaceGeometry assimp_to_surface_geometry(const std::string &filename)
     assert(scene);
     assert(scene->mNumMeshes > 0);
 
-    SurfaceGeometry geom;
+    SurfaceGeometry *geom = new SurfaceGeometry();
     for (int mesh_index = 0; mesh_index < scene->mNumMeshes; mesh_index++) {
         aiMesh *mesh = scene->mMeshes[mesh_index];
 
         std::vector<Vertex> vertex_list(mesh->mNumVertices);
         for (int vertex_index = 0; vertex_index < mesh->mNumVertices; vertex_index++) {
             auto &position = mesh->mVertices[vertex_index];
-            vertex_list[vertex_index] = geom.add_vertex(position.x, position.y, position.z);
+            vertex_list[vertex_index] = geom->add_vertex(position.x, position.y, position.z);
         }
         // Get maximum number of vertices in a face.
         uint32_t max_face_vertices = 0;
@@ -36,7 +36,7 @@ SurfaceGeometry assimp_to_surface_geometry(const std::string &filename)
                 uint32_t index = face->mIndices[face_index_index];
                 face_vertices[face_index_index] = vertex_list[index];
             }
-            geom.mesh.add_face(&face_vertices[0], face->mNumIndices);
+            geom->mesh.add_face(&face_vertices[0], face->mNumIndices);
         }
     }
     

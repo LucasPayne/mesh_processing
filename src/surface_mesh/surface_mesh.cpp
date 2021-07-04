@@ -257,6 +257,12 @@ size_t SurfaceMesh::num_faces() const
     return face_pool.num_elements();
 }
 
+// Copy assignment.
+SurfaceMesh &SurfaceMesh::operator=(const SurfaceMesh &other)
+{
+    assert(0);
+    return *this;
+}
 
 
 
