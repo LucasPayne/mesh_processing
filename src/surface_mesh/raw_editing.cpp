@@ -73,9 +73,8 @@ bool SurfaceMesh::remove_vertex(Vertex vertex)
 {
     assert(!locked());
     // Can only remove an isolated vertex.
-    assert(vertex.halfedge().null());
+    // ---- TODO: Verify this vertex is isolated!
     vertex_pool.remove(vertex.index());
-    printf("Removed vertex\n");
     return true;
 }
 
@@ -83,31 +82,19 @@ bool SurfaceMesh::remove_face(Face face)
 {
     assert(!locked());
     
-    // Make sure that vertices do not reference the halfedges that will be removed.
-    auto he = face.halfedge();
+    // Remove this face's halfedges.
+    auto start = face.halfedge();
+    auto he = start;
     do {
-        if (he.vertex().halfedge() == he) {
-            if (!he.twin().next().null()) {
-                
-            }
+        if (!he.twin().null()) {
+            he.twin().set_twin(Halfedge(*this, InvalidElementIndex));
         }
-    } while ((he = he.next()) != face.halfedge());
-
-    // // Remove this face's halfedges.
-    // auto start = face.halfedge();
-    // auto he = start;
-    // do {
-    //     if (!he.twin().null()) {
-    //         he.twin().set_twin(Halfedge(*this, InvalidElementIndex));
-    //     }
-    //     auto next = he.next();
-    //     halfedge_pool.remove(he.index());
-    //     he = next;
-    // } while (he != start); //note: start is removed, but the handle should still be the same when it wraps around.
+        auto next = he.next();
+        halfedge_pool.remove(he.index());
+        he = next;
+    } while (he != start); //note: start is removed, but the handle should still be the same when it wraps around.
 
     face_pool.remove(face.index());
-
-    printf("Removed face\n");
     return true;
 }
 

@@ -63,6 +63,7 @@ ElementIndex ElementPool::add()
 
 void ElementPool::remove(ElementIndex element_index)
 {
+    assert(is_active(element_index)); // Can only remove elements that are actually there.
     if (element_index < least_inactive_index) {
         least_inactive_index = element_index;
     }
@@ -70,6 +71,7 @@ void ElementPool::remove(ElementIndex element_index)
     for (auto attachment : attachments) {
         attachment->destroy(element_index);
     }
+    active_flags[element_index] = false;
     m_num_elements -= 1; // update the cached element count.
 }
 
