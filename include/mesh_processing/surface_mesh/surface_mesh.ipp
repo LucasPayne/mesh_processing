@@ -33,9 +33,7 @@ ElementAttachment<T>::~ElementAttachment()
 template <typename T>
 T &ElementAttachment<T>::get(ElementIndex element_index)
 {
-    if (!pool.is_active(element_index)) {
-        assert(pool.is_active(element_index));
-    }
+    assert(pool.is_active(element_index));
     return data[element_index];
 }
 

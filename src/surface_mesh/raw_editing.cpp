@@ -85,12 +85,24 @@ bool SurfaceMesh::remove_face(Face face)
     // Remove this face's halfedges.
     auto start = face.halfedge();
     auto he = start;
+    auto start_vertex = start.vertex(); // Needed for special case (last halfedge removal).
     do {
         if (!he.twin().null()) {
             he.twin().set_twin(Halfedge(*this, InvalidElementIndex));
         }
         auto next = he.next();
+
+        // IMPORTANT: Remove the halfedge from the vertex_indices->halfedge map.
+        // Usually, the halfedge tip can be retrieved by he.next().vertex(). However, while deleting this loop of halfedges,
+        // there is a special when removing the last halfedge, as its next() is now invalid.
+        auto vertex_indices = next == start ? std::pair<ElementIndex, ElementIndex>(he.vertex().index(), start_vertex.index())
+                                            : std::pair<ElementIndex, ElementIndex>(he.vertex().index(), he.next().vertex().index());
+        auto found = halfedge_map.find(vertex_indices);
+        assert(found != halfedge_map.end());
+        halfedge_map.erase(found);
+        // Remove the halfedge.
         halfedge_pool.remove(he.index());
+
         he = next;
     } while (he != start); //note: start is removed, but the handle should still be the same when it wraps around.
 
