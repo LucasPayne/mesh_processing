@@ -274,6 +274,8 @@ public:
 
     // Euler editing methods.
     // These maintain manifoldness.
+    void add(SurfaceMesh &mesh);
+    void remove_connected_component(Face starting_face);
 
     // Topology.
     bool locked() const;
@@ -282,6 +284,9 @@ public:
     // Boundary.
     std::vector<Halfedge> boundary_loops();
     size_t num_boundary_loops() const;
+    // Connected components.
+    std::vector<Face> connected_components();
+    size_t num_connected_components() const;
 
 
     // Counting elements.
@@ -339,6 +344,7 @@ private:
 
     // Private topology data.
     std::vector<Halfedge> m_boundary_loops;
+    std::vector<Face> m_connected_components;
     bool m_locked;
 
     

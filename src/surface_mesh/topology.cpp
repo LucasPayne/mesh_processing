@@ -3,11 +3,13 @@
 
 std::vector<Halfedge> SurfaceMesh::boundary_loops()
 {
+    assert(locked());
     return m_boundary_loops;
 }
 
 size_t SurfaceMesh::num_boundary_loops() const
 {
+    assert(locked());
     return m_boundary_loops.size();
 }
 
@@ -73,6 +75,7 @@ void SurfaceMesh::lock()
             he.set_face(Face(*this, InvalidElementIndex));
             he.set_vertex(v);
             he.set_twin(loop[i]);
+            loop[i].set_twin(he);
             boundary_halfedges.push_back(he);
         }
         // Join these boundary halfedges into a loop around the non-existent "face".
@@ -123,7 +126,9 @@ void SurfaceMesh::lock()
     //------------------------------------------------------------
     // By now, the mesh has been topologically verified.
     //------------------------------------------------------------
+    
     // Add vertex->halfedge incidences.
+    //------------------------------------------------------------
     for (auto v : vertices()) {
         vertex_visited[v] = false; // re-use this attachment.
     }
@@ -141,6 +146,36 @@ void SurfaceMesh::lock()
         } while ((he = he.next()) != start);
     }
 
+
+    // Compute connected components
+    //------------------------------------------------------------
+    m_connected_components.clear();
+    // For each face, store a "visited" flag (which starts at false).
+    // Repeat this process until connected components are found:
+    //     Find the next face which is not visited.
+    //     This corresponds to a connected component.
+    //     Run search(face):
+    //         Mark face as visited.
+    //         Recur: Find adjacent non-visited faces, and run search(face) on them.
+    FaceAttachment<char> face_visited(*this);
+    for (auto face : faces()) face_visited[face] = false;
+    std::function<void(Face)> search = [&](Face face) {
+	face_visited[face] = true;
+        auto start = face.halfedge();
+        auto he = start;
+        do {
+            assert(!he.twin().null());
+            if (!he.twin().face().null() && !face_visited[he.twin().face()]) {
+                search(he.twin().face());
+            }
+        } while ((he = he.next()) != start);
+    };
+    for (auto face : faces()) {
+        if (!face_visited[face]) {
+            m_connected_components.push_back(face);
+            search(face);
+        }
+    };
     m_locked = true;
 }
 
@@ -152,11 +187,28 @@ void SurfaceMesh::unlock()
     // Remove boundary loops.
     for (Halfedge start : boundary_loops()) {
         Halfedge he = start;
+        Vertex start_vertex = start.vertex();
         std::vector<Halfedge> loop;
         do {
             loop.push_back(he);
         } while ((he = he.next()) != start);
-        for (auto he : loop) halfedge_pool.remove(he.index());
+        for (auto he : loop) {
+            // note: This HalfEdge removal code is low-level mesh editing (it is hard to maintain any invariants),
+            //       and is duplicated in remove_face().
+            if (!he.twin().null()) {
+                he.twin().set_twin(Halfedge(*this, InvalidElementIndex));
+            }
+            // IMPORTANT: Remove the halfedge from the vertex_indices->halfedge map.
+            // Usually, the halfedge tip can be retrieved by he.next().vertex(). However, while deleting this loop of halfedges,
+            // there is a special when removing the last halfedge, as its next() is now invalid.
+            auto vertex_indices = he.next() == start ? std::pair<ElementIndex, ElementIndex>(he.vertex().index(), start_vertex.index())
+                                                     : std::pair<ElementIndex, ElementIndex>(he.vertex().index(), he.next().vertex().index());
+            auto found = halfedge_map.find(vertex_indices);
+            assert(found != halfedge_map.end());
+            halfedge_map.erase(found);
+            // Remove the halfedge.
+            halfedge_pool.remove(he.index());
+        }
     }
 
 
@@ -164,3 +216,16 @@ void SurfaceMesh::unlock()
 }
 
 
+
+
+std::vector<Face> SurfaceMesh::connected_components()
+{
+    assert(locked());
+    return m_connected_components;
+}
+
+size_t SurfaceMesh::num_connected_components() const
+{
+    assert(locked());
+    return m_connected_components.size();
+}
