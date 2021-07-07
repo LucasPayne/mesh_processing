@@ -35,7 +35,7 @@ private:
 };
 
 SurfaceGeometry *loop(Triangular &subdiv, SurfaceGeometry &geom);
-
+SurfaceGeometry *barycentric(Triangular &subdiv, SurfaceGeometry &geom);
 
 }; // namespace Subdivision
 #endif // MESH_PROCESSING_SURFACE_MESH_SUBDIVISION_H

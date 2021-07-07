@@ -83,13 +83,13 @@ SurfaceGeometry *barycentric(Triangular &subdiv, SurfaceGeometry &geom)
 
     auto subdiv_geom = new SurfaceGeometry(subdiv.mesh());
     for (auto v : original_mesh.vertices()) {
-        subdiv_geom.position[subdiv.corresponding_vertex(v)] = geom.position[v];
+        subdiv_geom->position[subdiv.corresponding_vertex(v)] = geom.position[v];
     }
-    for (auto edge : geom->mesh.edges()) {
-        vec_t pos = 0.5*geom.position[edge.a().vertex()] + 0.5*geom->position[edge.b().vertex()];
-        subdiv_geom.position[mesh_subdiv->edge_split_vertex(edge)] = pos;
+    for (auto edge : geom.mesh.edges()) {
+        vec_t pos = 0.5*geom.position[edge.a().vertex()] + 0.5*geom.position[edge.b().vertex()];
+        subdiv_geom->position[subdiv.edge_split_vertex(edge)] = pos;
     }
-    geom = subdiv;
+    return subdiv_geom;
 }
 
 
