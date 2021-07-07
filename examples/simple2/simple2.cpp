@@ -21,7 +21,7 @@ int main(void)
     std::cout << grid.num_halfedges() << "\n";
     std::cout << grid.num_edges() << "\n";
 
-    grid.subdivide_triangles();
+    auto subdiv = TriangularSubdivision(grid);
 
 
     // for (auto start : grid.boundary_loops()) {

@@ -296,7 +296,6 @@ public:
     // Copy assignment.
     SurfaceMesh &operator=(const SurfaceMesh &other);
 
-
     // Raw editing methods.
     // These do not necessarily maintain invariants, and are only valid when the mesh is unlocked.
     Vertex add_vertex();
@@ -329,11 +328,6 @@ public:
     // Tests for specific type of mesh.
     bool is_triangular(); //todo: Make this const.
     bool is_quad();
-
-    // Subdivision.
-    // SurfaceMeshTriangularSubdivision subdivide_triangles();
-    void subdivide_triangles();
-
 
     // Counting elements.
     size_t num_vertices() const;
@@ -425,47 +419,8 @@ private:
 
 
 #include "mesh_processing/surface_mesh/surface_mesh.ipp"
+#include "mesh_processing/surface_mesh/subdivision.h"
 
-
-class SurfaceMeshTriangularSubdivision {
-public:
-    SurfaceMesh &original_mesh()
-    {
-        return *m_original_mesh;
-    }
-    // SurfaceMesh &mesh()
-    // {
-    //     return m_subdiv_mesh;
-    // }
-    //Face center_face(Face original_face)
-    //{
-    //    return Face(m_subdiv_mesh, face_to_faces[original_face][0]);
-    //}
-    //// std::tuple<Face,Face,Face,Face> faces(Face original_face)
-    //// {
-    ////     return face_to_faces[original_face];
-    //// }
-    //Vertex corresponding_vertex(Vertex original_vertex)
-    //{
-    //    return Vertex(m_subdiv_mesh, vertex_to_vertex[original_vertex]);
-    //}
-private:
-    SurfaceMesh *m_original_mesh;
-    SurfaceMesh m_subdiv_mesh;
-    HalfedgeAttachment<std::tuple<ElementIndex,ElementIndex>> halfedge_to_halfedges; // Get the two subdivided halfedges.
-    FaceAttachment<std::tuple<ElementIndex,ElementIndex,ElementIndex,ElementIndex>> face_to_faces; // Get the four subdivided faces.
-    VertexAttachment<ElementIndex> vertex_to_vertex; // Get the corresponding vertex.
-
-    SurfaceMeshTriangularSubdivision(SurfaceMesh &_original_mesh) :
-        m_original_mesh{&_original_mesh},
-        m_subdiv_mesh(),
-        halfedge_to_halfedges(_original_mesh),
-        face_to_faces(_original_mesh),
-        vertex_to_vertex(_original_mesh)
-    {}
-
-    friend class SurfaceMesh;
-};
 
 
 #endif // SURFACE_MESH_H

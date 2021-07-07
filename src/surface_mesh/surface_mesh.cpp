@@ -162,38 +162,9 @@ ElementAttachmentBase::ElementAttachmentBase(size_t _type_size) :
 
 
 
-Halfedge Vertex::halfedge() const
-{
-    // Not valid when mesh is unlocked.
-    //   (Unlocked meshes don't have full half-edge data, so vertex->halfedge relations don't give full information for traversal.
-    //    It is simpler to just not expect valid vertex incidences, and set them up only when the mesh is locked.)
-    if (!mesh.locked()) {
-        std::cerr << "mesh traversal error: vertex->halfedge traversal is only valid when the mesh is locked.\n";
-        exit(EXIT_FAILURE);
-    }
-    return Halfedge(mesh, mesh.vertex_incidence_data[*this].halfedge_index);
-}
 void Vertex::set_halfedge(Halfedge halfedge)
 {
     mesh.vertex_incidence_data[*this].halfedge_index = halfedge.index();
-}
-
-
-Halfedge Halfedge::next() const
-{
-    return Halfedge(mesh, mesh.halfedge_incidence_data[*this].next_index);
-}
-Halfedge Halfedge::twin() const {
-    return Halfedge(mesh, mesh.halfedge_incidence_data[*this].twin_index);
-}
-
-Vertex Halfedge::vertex() const
-{
-    return Vertex(mesh, mesh.halfedge_incidence_data[*this].vertex_index);
-}
-Vertex Halfedge::tip() const
-{
-    return next().vertex();
 }
 
 void Halfedge::set_vertex(Vertex vertex)
@@ -228,9 +199,46 @@ void Edge::set_halfedge_b(Halfedge halfedge)
 
 
 
+
+Halfedge Vertex::halfedge() const
+{
+    // Not valid when mesh is unlocked.
+    //   (Unlocked meshes don't have full half-edge data, so vertex->halfedge relations don't give full information for traversal.
+    //    It is simpler to just not expect valid vertex incidences, and set them up only when the mesh is locked.)
+    if (!mesh.locked()) {
+        std::cerr << "mesh traversal error: vertex->halfedge traversal is only valid when the mesh is locked.\n";
+        exit(EXIT_FAILURE);
+    }
+    return Halfedge(mesh, mesh.vertex_incidence_data[*this].halfedge_index);
+}
+Halfedge Halfedge::next() const
+{
+    return Halfedge(mesh, mesh.halfedge_incidence_data[*this].next_index);
+}
+Halfedge Halfedge::twin() const {
+    return Halfedge(mesh, mesh.halfedge_incidence_data[*this].twin_index);
+}
+
+Vertex Halfedge::vertex() const
+{
+    return Vertex(mesh, mesh.halfedge_incidence_data[*this].vertex_index);
+}
+Vertex Halfedge::tip() const
+{
+    return next().vertex();
+}
+
 Face Halfedge::face() const
 {
     return Face(mesh, mesh.halfedge_incidence_data[*this].face_index);
+}
+Edge Halfedge::edge() const
+{
+    if (!mesh.locked()) {
+        std::cerr << "mesh traversal error: halfedge->edge traversal is only valid when the mesh is locked.\n";
+        exit(EXIT_FAILURE);
+    }
+    return Edge(mesh, mesh.halfedge_incidence_data[*this].edge_index);
 }
 
 Halfedge Face::halfedge() const
@@ -250,6 +258,15 @@ size_t Face::num_vertices() const
         n++;
     } while ((he = he.next()) != start);
     return n;
+}
+
+Halfedge Edge::a() const
+{
+    return Halfedge(mesh, mesh.edge_incidence_data[*this].halfedge_indices[0]);
+}
+Halfedge Edge::b() const
+{
+    return Halfedge(mesh, mesh.edge_incidence_data[*this].halfedge_indices[1]);
 }
 
 
