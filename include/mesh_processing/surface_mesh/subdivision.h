@@ -14,12 +14,21 @@ public:
 
     TriangularSubdivision(SurfaceMesh &_original_mesh);
 
+    inline Vertex corresponding_vertex(Vertex original_vertex)
+    {
+        return m_vertex_to_vertex[original_vertex];
+    }
+    inline Vertex edge_split_vertex(Edge original_edge)
+    {
+        return m_edge_split_vertex[original_edge];
+    }
+
 private:
     SurfaceMesh *m_original_mesh;
     SurfaceMesh m_subdiv_mesh;
 
-    EdgeAttachment<Vertex> edge_split_vertex;
-    VertexAttachment<Vertex> vertex_to_vertex;
+    EdgeAttachment<Vertex> m_edge_split_vertex;
+    VertexAttachment<Vertex> m_vertex_to_vertex;
 
     friend class SurfaceMesh;
 };

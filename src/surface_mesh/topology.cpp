@@ -46,6 +46,7 @@ void SurfaceMesh::lock()
 
     std::vector<std::vector<Halfedge>> loops(0);
     
+    printf("lock(): Computing boundary loops.\n");
     // Look for starting halfedges to form boundary loops.
     for (auto start : halfedges()) {
         if (start.twin().null() && !visited[start]) {
@@ -94,6 +95,7 @@ void SurfaceMesh::lock()
         m_boundary_loops.push_back(boundary_halfedges[0]); // (The first boundary halfedge is the beginning of iterations around the boundary.)
     }
 
+    printf("lock(): Testing vertex manifoldness.\n");
     // Test vertex manifoldness.
     //------------------------------------------------------------
     // A non-manifold vertex has disjoint triangle fans.
@@ -134,7 +136,8 @@ void SurfaceMesh::lock()
     //------------------------------------------------------------
     // By now, the mesh has been topologically verified.
     //------------------------------------------------------------
-    
+
+    printf("lock(): Adding vertex->halfedge incidences.\n");
     // Add vertex->halfedge incidences.
     //------------------------------------------------------------
     for (auto v : vertices()) {
@@ -154,6 +157,7 @@ void SurfaceMesh::lock()
         } while ((he = he.next()) != start);
     }
 
+    printf("lock(): Adding edge data.\n");
     // Add edge data. An "edge" only makes sense when the mesh is locked.
     //------------------------------------------------------------
     for (auto he : halfedges()) {
@@ -172,36 +176,39 @@ void SurfaceMesh::lock()
         visited[he.twin()] = true;
     }
 
-    // Compute connected components
-    //------------------------------------------------------------
-    m_connected_components.clear();
-    // For each face, store a "visited" flag (which starts at false).
-    // Repeat this process until connected components are found:
-    //     Find the next face which is not visited.
-    //     This corresponds to a connected component.
-    //     Run search(face), which:
-    //         Marks face as visited.
-    //         Recurs: Finds adjacent non-visited faces, and runs search(face) on them.
-    FaceAttachment<char> face_visited(*this);
-    for (auto face : faces()) face_visited[face] = false;
-    std::function<void(Face)> search = [&](Face face) {
-	face_visited[face] = true;
-        auto start = face.halfedge();
-        auto he = start;
-        do {
-            assert(!he.twin().null());
-            if (!he.twin().face().null() && !face_visited[he.twin().face()]) {
-                search(he.twin().face());
-            }
-        } while ((he = he.next()) != start);
-    };
-    for (auto face : faces()) {
-        if (!face_visited[face]) {
-            m_connected_components.push_back(face);
-            search(face);
-        }
-    };
+    printf("lock(): Computing connected components.\n");
+    // // Compute connected components
+    // //------------------------------------------------------------
+    // m_connected_components.clear();
+    // // For each face, store a "visited" flag (which starts at false).
+    // // Repeat this process until connected components are found:
+    // //     Find the next face which is not visited.
+    // //     This corresponds to a connected component.
+    // //     Run search(face), which:
+    // //         Marks face as visited.
+    // //         Recurs: Finds adjacent non-visited faces, and runs search(face) on them.
+    // FaceAttachment<char> face_visited(*this);
+    // for (auto face : faces()) face_visited[face] = false;
+    // std::function<void(Face)> search = [&](Face face) {
+    //     face_visited[face] = true;
+    //     auto start = face.halfedge();
+    //     auto he = start;
+    //     do {
+    //         assert(!he.twin().null());
+    //         if (!he.twin().face().null() && !face_visited[he.twin().face()]) {
+    //             search(he.twin().face());
+    //         }
+    //     } while ((he = he.next()) != start);
+    // };
+    // for (auto face : faces()) {
+    //     if (!face_visited[face]) {
+    //         m_connected_components.push_back(face);
+    //         search(face);
+    //     }
+    // };
+
     m_locked = true;
+    printf("lock(): Complete.\n");
 }
 
 
