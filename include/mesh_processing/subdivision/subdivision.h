@@ -1,7 +1,8 @@
 #ifndef MESH_PROCESSING_SURFACE_MESH_SUBDIVISION_H
 #define MESH_PROCESSING_SURFACE_MESH_SUBDIVISION_H
+namespace Subdivision {
 
-class TriangularSubdivision {
+class Triangular {
 public:
     inline SurfaceMesh &original_mesh()
     {
@@ -12,7 +13,7 @@ public:
         return m_subdiv_mesh;
     }
 
-    TriangularSubdivision(SurfaceMesh &_original_mesh);
+    Triangular(SurfaceMesh &_original_mesh);
 
     inline Vertex corresponding_vertex(Vertex original_vertex)
     {
@@ -33,5 +34,8 @@ private:
     friend class SurfaceMesh;
 };
 
+SurfaceGeometry *loop(Triangular &subdiv, SurfaceGeometry &geom);
 
+
+}; // namespace Subdivision
 #endif // MESH_PROCESSING_SURFACE_MESH_SUBDIVISION_H

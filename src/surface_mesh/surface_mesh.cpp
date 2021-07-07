@@ -211,6 +211,21 @@ Halfedge Vertex::halfedge() const
     }
     return Halfedge(mesh, mesh.vertex_incidence_data[*this].halfedge_index);
 }
+size_t Vertex::num_adjacent_vertices() const
+{
+    if (!mesh.locked()) {
+        std::cerr << "mesh traversal error: Vertex::num_adjacent_vertices() is only valid when the mesh is locked.\n";
+        exit(EXIT_FAILURE);
+    }
+    auto start = halfedge();
+    auto he = start;
+    int n = 0;
+    do {
+        n++;
+    } while ((he = he.twin().next()) != start);
+    return n;
+}
+
 Halfedge Halfedge::next() const
 {
     return Halfedge(mesh, mesh.halfedge_incidence_data[*this].next_index);
@@ -251,9 +266,9 @@ void Face::set_halfedge(Halfedge halfedge)
 }
 size_t Face::num_vertices() const
 {
-    int n = 0;
     auto start = halfedge();
     auto he = start;
+    int n = 0;
     do {
         n++;
     } while ((he = he.next()) != start);

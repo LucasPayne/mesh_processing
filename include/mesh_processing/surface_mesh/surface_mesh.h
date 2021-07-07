@@ -191,6 +191,7 @@ extern SurfaceMesh g_dummy_surface_mesh;
 class Vertex : public ElementHandle {
 public:
     Halfedge halfedge() const; // Only valid when the mesh is locked (single vertex->halfedge relations don't give full traversals for unlocked (non-manifold) meshes.)
+    size_t num_adjacent_vertices() const; // Only valid when mesh is locked.
     Vertex() :
         ElementHandle(g_dummy_surface_mesh, InvalidElementIndex)
     {}
@@ -419,7 +420,6 @@ private:
 
 
 #include "mesh_processing/surface_mesh/surface_mesh.ipp"
-#include "mesh_processing/surface_mesh/subdivision.h"
 
 
 
