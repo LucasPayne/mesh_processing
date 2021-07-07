@@ -75,5 +75,22 @@ SurfaceGeometry *loop(Triangular &subdiv, SurfaceGeometry &geom)
     return subdiv_geom;
 }
 
+SurfaceGeometry *barycentric(Triangular &subdiv, SurfaceGeometry &geom)
+{
+    // Barycentric subdivision.
+    assert(&subdiv.original_mesh() == &geom.mesh);
+    SurfaceMesh &original_mesh = subdiv.original_mesh();
+
+    auto subdiv_geom = new SurfaceGeometry(subdiv.mesh());
+    for (auto v : original_mesh.vertices()) {
+        subdiv_geom.position[subdiv.corresponding_vertex(v)] = geom.position[v];
+    }
+    for (auto edge : geom->mesh.edges()) {
+        vec_t pos = 0.5*geom.position[edge.a().vertex()] + 0.5*geom->position[edge.b().vertex()];
+        subdiv_geom.position[mesh_subdiv->edge_split_vertex(edge)] = pos;
+    }
+    geom = subdiv;
+}
+
 
 }; // namespace Subdivision
