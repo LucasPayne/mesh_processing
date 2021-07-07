@@ -20,3 +20,21 @@ half-edges which don't have an opposite.
 Non-manifold (unlocked) mesh
 Non-manifold vertex neighbours
 Face removal needs this
+
+
+Iterators
+Vertex
+    Outgoing halfedges
+    Incoming halfedges
+    One-ring
+    Fan
+Halfedge
+    Loop
+Face:
+    Vertices
+    Loop
+    Boundary
+    One-ring # Note that this is dual to vertices.
+
+
+

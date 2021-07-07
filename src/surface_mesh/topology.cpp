@@ -1,5 +1,6 @@
 #include "mesh_processing/mesh_processing.h"
-#include <algorithm>//reverse
+#include <algorithm>
+
 
 std::vector<Halfedge> SurfaceMesh::boundary_loops()
 {
@@ -11,6 +12,11 @@ size_t SurfaceMesh::num_boundary_loops() const
 {
     assert(locked());
     return m_boundary_loops.size();
+}
+bool SurfaceMesh::closed() const
+{
+    assert(locked());
+    return m_boundary_loops.size() == 0;
 }
 
 bool SurfaceMesh::locked() const {
@@ -134,7 +140,7 @@ void SurfaceMesh::lock()
     }
     // For each face, for all vertices on this face which have not had their halfedge set,
     // set it to the relevant halfedge on this face.
-    // (This is a somewhat arbitrary choice. Each vertex needs just any of its outgoing halfedges.)
+    // (This is a somewhat arbitrary choice. Each vertex needs just one of its outgoing halfedges.)
     for (auto face : faces()) {
         auto start = face.halfedge();
         auto he = start;
@@ -154,9 +160,9 @@ void SurfaceMesh::lock()
     // Repeat this process until connected components are found:
     //     Find the next face which is not visited.
     //     This corresponds to a connected component.
-    //     Run search(face):
-    //         Mark face as visited.
-    //         Recur: Find adjacent non-visited faces, and run search(face) on them.
+    //     Run search(face), which:
+    //         Marks face as visited.
+    //         Recurs: Finds adjacent non-visited faces, and runs search(face) on them.
     FaceAttachment<char> face_visited(*this);
     for (auto face : faces()) face_visited[face] = false;
     std::function<void(Face)> search = [&](Face face) {
@@ -229,3 +235,38 @@ size_t SurfaceMesh::num_connected_components() const
     assert(locked());
     return m_connected_components.size();
 }
+
+bool SurfaceMesh::connected() const
+{
+    // note: 0 connected components is not considered "closed".
+    return num_connected_components() == 1;
+}
+
+bool SurfaceMesh::compact() const
+{
+    return closed() && connected(); //---Is this a correct definition of compactness? It seems useful, though.
+}
+
+
+// SurfaceMesh SurfaceMesh::dual()
+// {
+//     assert(closed());
+// 
+//     SurfaceMesh dual_mesh;
+// 
+//     FaceAttachment<Vertex> face_to_dual_vertex(*this);
+//     for (auto face : faces()) {
+//         face_to_dual_vertex[face] = dual_mesh.add_vertex();
+//     }
+//     auto dual_face_dual_vertices = std::vector<Vertex>();
+//     for (auto v : vertices()) {
+//         for (auto face : v.fan()) {
+//             dual_face_dual_vertices.push_back(face_to_dual_vertex[face]);
+//         }
+//         dual_mesh.add_face(dual_face_dual_vertices);
+//         dual_face_dual_vertices.clear();
+//     }
+// 
+//     return dual_mesh;
+// }
+

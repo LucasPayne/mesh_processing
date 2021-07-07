@@ -16,6 +16,7 @@ template <typename T> class ElementAttachment;
 class ElementAttachmentBase;
 class Vertex;
 class Halfedge;
+class Edge;
 class Face;
 
 
@@ -128,6 +129,14 @@ public:
 
 
 template <typename T>
+class EdgeAttachment : public ElementAttachment<T> {
+public:
+    EdgeAttachment(SurfaceMesh &mesh);
+    T &operator[](const Edge &edge);
+};
+
+
+template <typename T>
 class FaceAttachment : public ElementAttachment<T> {
 public:
     FaceAttachment(SurfaceMesh &mesh);
@@ -140,7 +149,6 @@ public:
 
 
 struct VertexIncidenceData {
-    // A halfedge index is 2*edge_index + subindex, where subindex is 0 or 1 according to the choice of halfedge.
     ElementIndex halfedge_index;
 };
 struct FaceIncidenceData {
@@ -152,6 +160,11 @@ struct HalfedgeIncidenceData {
     ElementIndex face_index;
     ElementIndex twin_index;
 };
+struct EdgeIncidenceData {
+    ElementIndex halfedge_a;
+    ElementIndex halfedge_b;
+};
+
 
 
 
@@ -222,7 +235,7 @@ private:
 class Face : public ElementHandle {
 public:
     Halfedge halfedge() const;
-    int num_vertices();
+    size_t num_vertices() const;
 
     Face() :
         ElementHandle(g_dummy_surface_mesh, InvalidElementIndex)
@@ -235,6 +248,26 @@ private:
     void set_halfedge(Halfedge halfedge);
     friend class SurfaceMesh;
 };
+
+// note: Edges only make sense when the mesh is locked (all halfedges have a twin).
+class Edge : public ElementHandle {
+public:
+    Halfedge a() const;
+    Halfedge b() const;
+
+    Edge() :
+        ElementHandle(g_dummy_surface_mesh, InvalidElementIndex)
+    {}
+    //todo: Hide from public interface.
+    Edge(SurfaceMesh &_mesh, ElementIndex _index) :
+        ElementHandle(_mesh, _index)
+    {}
+private:
+    void set_halfedge_a(Halfedge halfedge);
+    void set_halfedge_b(Halfedge halfedge);
+    friend class SurfaceMesh;
+};
+
 
 
 
@@ -263,7 +296,7 @@ public:
 
 
     // Raw editing methods.
-    // These do not necessarily maintain invariants.
+    // These do not necessarily maintain invariants, and are only valid when the mesh is unlocked.
     Vertex add_vertex();
     Face add_triangle(Vertex v1, Vertex v2, Vertex v3);
     Face add_face(Vertex *vertices, int num_vertices);
@@ -273,7 +306,7 @@ public:
     bool remove_face(Face face); // Remove a face and all its halfedges. Vertices are unaffected.
 
     // Euler editing methods.
-    // These maintain manifoldness.
+    // These maintain manifoldness, and are only valid when the mesh is locked.
     void add(SurfaceMesh &mesh);
     void remove_connected_component(Face starting_face);
 
@@ -287,12 +320,19 @@ public:
     // Connected components.
     std::vector<Face> connected_components();
     size_t num_connected_components() const;
+    // Manifold properties.
+    bool closed() const;
+    bool connected() const;
+    bool compact() const; // A compact mesh is compact as a manifold (is both closed/boundaryless and connected).
+    // Triangular meshes.
+    bool is_triangular() const;
 
 
     // Counting elements.
     size_t num_vertices() const;
     size_t num_halfedges() const;
     size_t num_faces() const;
+    size_t num_edges() const;
 
     void printout();
     
@@ -317,6 +357,9 @@ public:
     }
     ElementContainer<Halfedge> halfedges() {
         return ElementContainer<Halfedge>(this, &halfedge_pool);
+    }
+    ElementContainer<Edge> edges() {
+        return ElementContainer<Edge>(this, &edge_pool);
     }
     ElementContainer<Face> faces() {
         return ElementContainer<Face>(this, &face_pool);

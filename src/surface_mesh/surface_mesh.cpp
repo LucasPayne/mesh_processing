@@ -228,17 +228,15 @@ void Face::set_halfedge(Halfedge halfedge)
 {
     mesh.face_incidence_data[*this].halfedge_index = halfedge.index();
 }
-int Face::num_vertices()
+size_t Face::num_vertices() const
 {
-    if (null()) return 0;
-    int i = 0;
+    int n = 0;
     auto start = halfedge();
     auto he = start;
     do {
-        i++;
-        he = he.next();
-    } while (he != start);
-    return i;
+        n++;
+    } while ((he = he.next()) != start);
+    return n;
 }
 
 
@@ -265,11 +263,17 @@ size_t SurfaceMesh::num_faces() const
 {
     return face_pool.num_elements();
 }
+size_t SurfaceMesh::num_edges() const
+{
+    // The idea of "edge" is only valid when the mesh is locked.
+    assert(locked() && num_halfedges() % 2 == 0);
+    return num_halfedges() / 2;
+}
 
 // Copy assignment.
 SurfaceMesh &SurfaceMesh::operator=(const SurfaceMesh &other)
 {
-    assert(0);
+    assert(0); //todo: Implement this.
     return *this;
 }
 
