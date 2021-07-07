@@ -142,11 +142,9 @@ SurfaceMeshTriangularSubdivision SurfaceMesh::subdivide_triangles()
 
     auto subdiv = SurfaceMeshTriangularSubdivision(*this);
 
-
     for (auto edge : edges()) {
-
+        printf("haha nice\n");
     }
-    
 }
 
 

@@ -31,11 +31,13 @@ void SurfaceMesh::lock()
     //     - Halfedges do not need to have twins.
     //     - A boundary halfedge is known by the fact that twin() is null.
     //     - Vertex->halfedge incidences are not valid.
+    //     - An undirected edge make no sense, and Edge handles can't be used.
     // "Locked":
     //     - Has a list of boundary halfedges, one for each boundary loop.
     //     - Boundary halfedges form a next() loop around the boundary "face", although the face() is null.
     //     - A boundary halfedge is known by the fact that face() is null.
     //     - Vertex->halfedge incidences have been set up for mesh traversal.
+    //     - Edge handles can be used.
 
     HalfedgeAttachment<char> visited(*this); //note: Something goes wrong with bool (maybe because std::vector<bool> is actually a different data structure).
     for (auto he : halfedges()) {
@@ -152,6 +154,21 @@ void SurfaceMesh::lock()
         } while ((he = he.next()) != start);
     }
 
+    // Add edge data. An "edge" only makes sense when the mesh is locked.
+    //------------------------------------------------------------
+    for (auto he : halfedges()) {
+        visited[he] = false; // Re-use this attachment.
+    }
+    for (auto he : halfedges()) {
+        if (visited[he] || visited[he.twin()]) continue;
+        // Create a new edge.
+        auto edge = Edge(*this, edge_pool.add());
+        // Set up halfedges<->edge incidence data.
+        edge.set_halfedge_a(he);
+        edge.set_halfedge_b(he.twin());
+        he.set_edge(edge);
+        he.twin().set_edge(edge);
+    }
 
     // Compute connected components
     //------------------------------------------------------------
@@ -216,7 +233,6 @@ void SurfaceMesh::unlock()
             halfedge_pool.remove(he.index());
         }
     }
-
 
     m_locked = false;
 }

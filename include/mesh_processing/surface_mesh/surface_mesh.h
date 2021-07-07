@@ -159,10 +159,10 @@ struct HalfedgeIncidenceData {
     ElementIndex vertex_index;
     ElementIndex face_index;
     ElementIndex twin_index;
+    ElementIndex edge_index;
 };
 struct EdgeIncidenceData {
-    ElementIndex halfedge_a;
-    ElementIndex halfedge_b;
+    ElementIndex halfedge_indices[2];
 };
 
 
@@ -214,6 +214,7 @@ public:
     Vertex vertex() const;
     Vertex tip() const;
     Face face() const;
+    Edge edge() const;
 
     Halfedge() :
         ElementHandle(g_dummy_surface_mesh, InvalidElementIndex)
@@ -227,6 +228,7 @@ private:
     void set_face(Face face);
     void set_next(Halfedge halfedge);
     void set_twin(Halfedge halfedge);
+    void set_edge(Edge edge);
 
     friend class SurfaceMesh;
 };
@@ -359,6 +361,7 @@ public:
         return ElementContainer<Halfedge>(this, &halfedge_pool);
     }
     ElementContainer<Edge> edges() {
+        assert(locked());
         return ElementContainer<Edge>(this, &edge_pool);
     }
     ElementContainer<Face> faces() {
@@ -371,11 +374,13 @@ private:
     // and references to attachments.
     ElementPool vertex_pool;
     ElementPool halfedge_pool;
+    ElementPool edge_pool;
     ElementPool face_pool;
     // Incidence information is stored as a collection of functions of the elements (called "attachments").
     // These are attached to the relevant ElementPools.
     VertexAttachment<VertexIncidenceData> vertex_incidence_data;
     HalfedgeAttachment<HalfedgeIncidenceData> halfedge_incidence_data;
+    EdgeAttachment<EdgeIncidenceData> edge_incidence_data;
     FaceAttachment<FaceIncidenceData> face_incidence_data;
 
     // Map from pairs of vertex indices to halfedge indices.

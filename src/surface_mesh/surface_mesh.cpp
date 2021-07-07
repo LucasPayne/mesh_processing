@@ -212,6 +212,19 @@ void Halfedge::set_twin(Halfedge halfedge)
 {
     mesh.halfedge_incidence_data[*this].twin_index = halfedge.index();
 }
+void Halfedge::set_edge(Edge edge)
+{
+    mesh.halfedge_incidence_data[*this].edge_index = edge.index();
+}
+
+void Edge::set_halfedge_a(Halfedge halfedge)
+{
+    mesh.edge_incidence_data[*this].halfedge_indices[0] = halfedge.index();
+}
+void Edge::set_halfedge_b(Halfedge halfedge)
+{
+    mesh.edge_incidence_data[*this].halfedge_indices[1] = halfedge.index();
+}
 
 
 
