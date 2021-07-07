@@ -9,15 +9,20 @@
 int main(void)
 {
     auto grid = Enmesh::grid_mesh(10, 10);
-    auto grid2 = Enmesh::grid_mesh(5, 5);
-    grid.add(grid2);
+    // auto grid2 = Enmesh::grid_mesh(5, 5);
+    // grid.add(grid2);
     grid.lock();
+    // for (auto face : grid.connected_components()) {
+    //     grid.remove_connected_component(face);
+    //     break;
+    // }
+    // std::cout << grid.num_connected_components() << "\n";
 
-    for (auto face : grid.connected_components()) {
-        grid.remove_connected_component(face);
-        break;
-    }
-    std::cout << grid.num_connected_components() << "\n";
+    std::cout << grid.num_halfedges() << "\n";
+    std::cout << grid.num_edges() << "\n";
+
+    grid.subdivide_triangles();
+
 
     // for (auto start : grid.boundary_loops()) {
     //     printf("Loop\n");

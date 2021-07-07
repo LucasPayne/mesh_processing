@@ -1,5 +1,4 @@
 #include "mesh_processing/mesh_processing.h"
-#include <algorithm>//reverse
 
 
 /* Add all mesh elements of another mesh, disjointly, to this mesh.
@@ -80,7 +79,7 @@ void SurfaceMesh::remove_connected_component(Face starting_face)
 }
 
 
-bool SurfaceMesh::is_triangular() const
+bool SurfaceMesh::is_triangular()
 {
     for (auto face : faces()) {
         if (face.num_vertices() != 3) return false;
@@ -88,7 +87,7 @@ bool SurfaceMesh::is_triangular() const
     return true;
 }
 
-bool SurfaceMesh::is_quad() const
+bool SurfaceMesh::is_quad()
 {
     for (auto face : faces()) {
         if (face.num_vertices() != 4) return false;
@@ -97,54 +96,5 @@ bool SurfaceMesh::is_quad() const
 }
 
 
-
-class SurfaceMeshTriangularSubdivision {
-public:
-    SurfaceMesh &original_mesh()
-    {
-        return m_original_mesh;
-    }
-    SurfaceMesh &mesh()
-    {
-        return m_subdiv_mesh;
-    }
-    Face center_face(Face original_face)
-    {
-        return Face(m_subdiv_mesh, face_to_faces[original_face][0]);
-    }
-    // std::tuple<Face,Face,Face,Face> faces(Face original_face)
-    // {
-    //     return face_to_faces[original_face];
-    // }
-    Vertex corresponding_vertex(Vertex original_vertex)
-    {
-        return Vertex(m_subdiv_mesh, vertex_to_vertex[original_vertex]);
-    }
-private:
-    SurfaceMesh m_original_mesh;
-    SurfaceMesh m_subdiv_mesh;
-    HalfedgeAttachment<std::tuple<ElementIndex,ElementIndex>> halfedge_to_halfedges; // Get the two subdivided halfedges.
-    FaceAttachment<std::tuple<ElementIndex,ElementIndex,ElementIndex,ElementIndex>> face_to_faces; // Get the four subdivided faces.
-    VertexAttachment<ElementIndex> vertex_to_vertex; // Get the corresponding vertex.
-
-    SurfaceMeshTriangularSubdivision(SurfaceMesh &_original_mesh) :
-        m_original_mesh{_original_mesh}
-    {}
-
-    friend class SurfaceMesh;
-};
-
-
-SurfaceMeshTriangularSubdivision SurfaceMesh::subdivide_triangles()
-{
-    assert(locked());
-    assert(is_triangular());
-
-    auto subdiv = SurfaceMeshTriangularSubdivision(*this);
-
-    for (auto edge : edges()) {
-        printf("haha nice\n");
-    }
-}
 
 

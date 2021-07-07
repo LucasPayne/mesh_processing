@@ -168,6 +168,8 @@ void SurfaceMesh::lock()
         edge.set_halfedge_b(he.twin());
         he.set_edge(edge);
         he.twin().set_edge(edge);
+        visited[he] = true;
+        visited[he.twin()] = true;
     }
 
     // Compute connected components
@@ -233,6 +235,8 @@ void SurfaceMesh::unlock()
             halfedge_pool.remove(he.index());
         }
     }
+
+    //TODO: Remove edges.
 
     m_locked = false;
 }

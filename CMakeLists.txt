@@ -18,6 +18,7 @@ add_library(mesh_processing STATIC
     src/surface_mesh/raw_editing.cpp
     src/surface_mesh/topology.cpp
     src/surface_mesh/euler_editing.cpp
+    src/surface_mesh/subdivision.cpp
 
     # SurfaceGeometry data structure (simple wrapper to SurfaceMesh which gives vertex positions by default).
     src/surface_geometry/surface_geometry.cpp

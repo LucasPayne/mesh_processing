@@ -259,6 +259,7 @@ size_t Face::num_vertices() const
 SurfaceMesh::SurfaceMesh() :
     vertex_incidence_data(*this),
     halfedge_incidence_data(*this),
+    edge_incidence_data(*this),
     face_incidence_data(*this),
     m_locked{false}
 {

@@ -97,6 +97,22 @@ T &HalfedgeAttachment<T>::operator[](const Halfedge &halfedge)
 
 
 /*--------------------------------------------------------------------------------
+    EdgeAttachment
+--------------------------------------------------------------------------------*/
+template <typename T>
+EdgeAttachment<T>::EdgeAttachment(SurfaceMesh &mesh) :
+    ElementAttachment<T>(mesh.edge_pool)
+{}
+
+template <typename T>
+T &EdgeAttachment<T>::operator[](const Edge &edge)
+{
+    return this->get(edge.index());
+}
+
+
+
+/*--------------------------------------------------------------------------------
     FaceAttachment
 --------------------------------------------------------------------------------*/
 template <typename T>
