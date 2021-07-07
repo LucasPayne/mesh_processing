@@ -1,41 +1,18 @@
-#ifndef SURFACE_GEOMTRY_H
-#define SURFACE_GEOMTRY_H
+#ifndef SURFACE_GEOMETRY_H
+#define SURFACE_GEOMETRY_H
 
 
 using vec_t = Eigen::Vector3f;
 
 class SurfaceGeometry {
 public:
-    SurfaceMesh mesh;
+    SurfaceMesh &mesh;
+    VertexAttachment<vec_t> position;
 
-    Vertex add_vertex(vec_t position);
-    Vertex add_vertex(float x, float y, float z);
-    Face add_triangle(Vertex v1, Vertex v2, Vertex v3);
-
-    SurfaceGeometry() :
-        mesh(),
-        vertex_positions(mesh),
-        vertex_normals(mesh),
-        face_normals(mesh)
+    SurfaceGeometry(SurfaceMesh &_mesh) :
+        mesh{_mesh},
+        position(mesh)
     {}
-
-    SurfaceMesh::ElementContainer<Vertex> vertices() { return mesh.vertices(); }
-    SurfaceMesh::ElementContainer<Halfedge> edges() { return mesh.halfedges(); }
-    SurfaceMesh::ElementContainer<Face> faces() { return mesh.faces(); }
-
-    size_t num_vertices() const { return mesh.num_vertices(); }
-    size_t num_halfedges() const { return mesh.num_halfedges(); }
-    size_t num_faces() const { return mesh.num_faces(); }
-
-    void printout();
-
-    VertexAttachment<vec_t> vertex_positions;
-    VertexAttachment<vec_t> vertex_normals;
-    FaceAttachment<vec_t> face_normals;
-    
-    // Input/output.
-    void write_OFF(std::ostream &out);
-    void read_OFF(std::istream &in);
 };
 
-#endif // SURFACE_GEOMTRY_H
+#endif // SURFACE_GEOMETRY_H

@@ -348,8 +348,8 @@ CMakeFiles/example_external_application.dir/main.cpp.o: main.cpp \
   /usr/include/c++/8/bits/stl_map.h \
   /usr/include/c++/8/bits/stl_multimap.h \
   /home/lucas/computer_graphics/mesh_processing/include/mesh_processing/surface_mesh/surface_mesh.ipp \
+  /home/lucas/computer_graphics/mesh_processing/include/mesh_processing/surface_mesh/subdivision.h \
   /home/lucas/computer_graphics/mesh_processing/include/mesh_processing/surface_geometry/surface_geometry.h \
-  /home/lucas/computer_graphics/mesh_processing/include/mesh_processing/enmesh/enmesh.h \
   /home/lucas/computer_graphics/mesh_processing/include/mesh_processing/extensions/assimp_convert.h \
   /home/lucas/computer_graphics/assimp/include/assimp/Importer.hpp \
   /home/lucas/computer_graphics/assimp/include/assimp/types.h \
@@ -389,6 +389,8 @@ CMakeFiles/example_external_application.dir/main.cpp.o: main.cpp \
 
 /home/lucas/computer_graphics/assimp/include/assimp/camera.h:
 
+/home/lucas/computer_graphics/assimp/include/assimp/light.h:
+
 /home/lucas/computer_graphics/assimp/include/assimp/aabb.h:
 
 /home/lucas/computer_graphics/assimp/include/assimp/mesh.h:
@@ -416,10 +418,6 @@ CMakeFiles/example_external_application.dir/main.cpp.o: main.cpp \
 /home/lucas/computer_graphics/assimp/include/assimp/vector2.h:
 
 /home/lucas/computer_graphics/mesh_processing/include/mesh_processing/extensions/assimp_convert.h:
-
-/home/lucas/computer_graphics/assimp/include/assimp/light.h:
-
-/home/lucas/computer_graphics/mesh_processing/include/mesh_processing/enmesh/enmesh.h:
 
 /home/lucas/computer_graphics/mesh_processing/include/mesh_processing/surface_geometry/surface_geometry.h:
 
@@ -560,6 +558,8 @@ CMakeFiles/example_external_application.dir/main.cpp.o: main.cpp \
 /usr/include/eigen3/Eigen/src/Core/Visitor.h:
 
 /usr/include/c++/8/ios:
+
+/home/lucas/computer_graphics/mesh_processing/include/mesh_processing/surface_mesh/subdivision.h:
 
 /usr/include/eigen3/Eigen/src/plugins/MatrixCwiseUnaryOps.h:
 

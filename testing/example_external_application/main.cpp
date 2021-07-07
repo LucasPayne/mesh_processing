@@ -6,14 +6,12 @@
 int main(void)
 {
     SurfaceGeometry *geom = assimp_to_surface_geometry("Tangram-6.stl");
-    std::cout << geom->num_vertices() << "\n";
-    std::cout << geom->num_faces() << "\n";
-    getchar();
+    geom->mesh.lock();
 
-    std::cout << geom->mesh.num_boundary_loops() << "\n";
+    std::cout << geom->mesh.num_vertices() << "\n";
+    std::cout << geom->mesh.num_edges() << "\n";
 
-    geom.mesh.lock();
-    
-    // auto mesh = Enmesh::grid_mesh(10, 10);
-    // std::cout << mesh.num_vertices() << "\n";
+    auto mesh_subdiv = TriangularSubdivision(geom->mesh);
+
+    std::cout << mesh_subdiv.mesh().num_vertices() << "\n";
 }

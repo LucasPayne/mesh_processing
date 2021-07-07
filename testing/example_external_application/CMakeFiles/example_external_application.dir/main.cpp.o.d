@@ -292,8 +292,8 @@ CMakeFiles/example_external_application.dir/main.cpp.o: \
  /usr/include/c++/8/ext/aligned_buffer.h \
  /usr/include/c++/8/bits/stl_map.h /usr/include/c++/8/bits/stl_multimap.h \
  /home/lucas/computer_graphics/mesh_processing/testing/example_external_application/../../include/mesh_processing/surface_mesh/surface_mesh.ipp \
+ /home/lucas/computer_graphics/mesh_processing/testing/example_external_application/../../include/mesh_processing/surface_mesh/subdivision.h \
  /home/lucas/computer_graphics/mesh_processing/testing/example_external_application/../../include/mesh_processing/surface_geometry/surface_geometry.h \
- /home/lucas/computer_graphics/mesh_processing/testing/example_external_application/../../include/mesh_processing/enmesh/enmesh.h \
  /home/lucas/computer_graphics/mesh_processing/testing/example_external_application/../../include/mesh_processing/extensions/assimp_convert.h \
  /home/lucas/computer_graphics/assimp/include/assimp/Importer.hpp \
  /home/lucas/computer_graphics/assimp/include/assimp/types.h \
