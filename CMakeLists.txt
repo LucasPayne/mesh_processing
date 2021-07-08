@@ -6,11 +6,13 @@ project(mesh_processing)
 set(build_extension_assimp_convert YES)
 set(ASSIMP_INCLUDE_DIR /home/lucas/computer_graphics/assimp/include) #<----Set this to the correct directory if the above is set to YES.
 
-
+# External dependencies.
 set(EIGEN3_INCLUDE_DIR "usr/include/eigen3")
 find_package(Eigen3 REQUIRED)
+add_subdirectory(dependencies/tetgen/tetgen1.6.0)
+set(TETGEN_INCLUDE_DIR "dependencies/tetgen/tetgen1.6.0")
 
-include_directories(. include ${EIGEN3_INCLUDE_DIR})
+include_directories(. include ${EIGEN3_INCLUDE_DIR} ${TETGEN_INCLUDE_DIR})
 
 add_library(mesh_processing STATIC
     # SurfaceMesh data structure.
@@ -42,6 +44,9 @@ if(build_extension_assimp_convert)
     set_property(TARGET assimp_convert PROPERTY POSITION_INDEPENDENT_CODE ON)
     target_link_libraries(mesh_processing assimp_convert)
 endif()
+
+# Link dependencies.
+target_link_libraries(mesh_processing tet)
 
 
 # Compile example applications

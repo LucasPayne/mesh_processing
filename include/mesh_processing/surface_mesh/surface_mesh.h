@@ -289,7 +289,6 @@ private:
 };
 
 
-class SurfaceMeshTriangularSubdivision;
 class SurfaceMesh {
 public:
     SurfaceMesh();
@@ -320,7 +319,7 @@ public:
     std::vector<Halfedge> boundary_loops();
     size_t num_boundary_loops() const;
     // Connected components.
-    std::vector<Face> connected_components();
+    std::vector<Face> connected_components(); // Returns one face from each connected component.
     size_t num_connected_components() const;
     // Manifold properties.
     bool closed() const;

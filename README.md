@@ -13,7 +13,9 @@ simply include mesh_processing.h and link against the compiled library.
 
 # Dependencies
 -----------------------
-[Eigen3 (C++ header-only linear algebra library. Update CMakeLists.txt to point to the Eigen3 header files if needed.)](https://gitlab.com/libeigen/eigen)
+- [Eigen3 (C++ header-only linear algebra library. Update CMakeLists.txt to point to the Eigen3 header files if needed.)](https://gitlab.com/libeigen/eigen)
+- [TetGen (Hang Si. A Quality Tetrahedral Mesh Generator and a 3D Delaunay Triangulator)](http://wias-berlin.de/software/index.jsp?id=TetGen&lang=1)
+
 
 # References
 -----------------------
