@@ -6,8 +6,7 @@
 // Non-editable basic output of tetgen.
 class TetgenMesh {
 public:
-    TetgenMesh(SurfaceMesh &mesh);
-
+    TetgenMesh(SurfaceGeometry &geom);
 private:
 };
 

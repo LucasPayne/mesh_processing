@@ -14,6 +14,7 @@
 #include "surface_mesh/surface_mesh.h"
 #include "surface_geometry/surface_geometry.h"
 #include "subdivision/subdivision.h"
+#include "tetrahedralization/tetrahedralization.h"
 // #include "enmesh/enmesh.h"
 
 #endif // MESH_PROCESSING_H

@@ -1,0 +1,15 @@
+important note:
+The Linux tetview executable is 32-bit, and requires the right libraries installed in /lib32.
+
+The following installs worked in one case.
+
+sudo dpkg --add-architecture i386
+sudo apt-get install libgl1-mesa-dev:i386 libglu1-mesa-dev:i386
+
+http://old-releases.ubuntu.com/ubuntu/pool/universe/g/gcc-3.4/libg2c0_3.4.6-6ubuntu5_i386.deb
+https://packages.debian.org/sid/i386/libstdc++5/download
+
+ar x [...].deb    # Extract .deb.
+tar xf data...    # Extract package data.
+Find the .so files and copy them to /usr/lib/i386-linux-gnu.
+

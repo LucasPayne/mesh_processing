@@ -5,8 +5,6 @@
 TetgenMesh::TetgenMesh(SurfaceGeometry &geom)
 {
     assert(geom.mesh.locked() && geom.mesh.closed());
-
-    char *switches = "pq1.414a0.1";
     
     // Create tetgen input PLC (piecewise linear complex).
     //------------------------------------------------------------
@@ -25,9 +23,8 @@ TetgenMesh::TetgenMesh(SurfaceGeometry &geom)
         points[3*vertex_index+0] = pos.x();
         points[3*vertex_index+1] = pos.y();
         points[3*vertex_index+2] = pos.z();
-        contiguous_vertex_indices[vertex_index] = i;
+        contiguous_vertex_indices[v] = vertex_index;
         vertex_index += 1;
-    }
     }
     in.pointlist = &points[0];
     in.pointattributelist = nullptr;
@@ -53,7 +50,7 @@ TetgenMesh::TetgenMesh(SurfaceGeometry &geom)
 
 
     size_t facet_index = 0;
-    size_t = vertex_indices_offset = 0;
+    size_t vertex_indices_offset = 0;
     for (auto face : geom.mesh.faces()) {
         tetgenio::facet *f = &facets[facet_index];
         f->numberofpolygons = 1;
@@ -82,7 +79,7 @@ TetgenMesh::TetgenMesh(SurfaceGeometry &geom)
     // Retrieve tetgen output.
     //------------------------------------------------------------
     tetgenio out;
-    tetrahedralize(switches, &in, &out);
+    tetrahedralize("pq1.414a0.1", &in, &out);
     out.save_nodes("barout");
     out.save_elements("barout");
     out.save_faces("barout");

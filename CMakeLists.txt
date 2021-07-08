@@ -9,10 +9,13 @@ set(ASSIMP_INCLUDE_DIR /home/lucas/computer_graphics/assimp/include) #<----Set t
 # External dependencies.
 set(EIGEN3_INCLUDE_DIR "usr/include/eigen3")
 find_package(Eigen3 REQUIRED)
-add_subdirectory(dependencies/tetgen/tetgen1.6.0)
+add_compile_options(-DTETLIBRARY)
+# add_subdirectory(dependencies/tetgen/tetgen1.6.0)
+# Note: Compilation -DTETLIBRARY must be specified in the tetgen CMake file.
 set(TETGEN_INCLUDE_DIR "dependencies/tetgen/tetgen1.6.0")
 
 include_directories(. include ${EIGEN3_INCLUDE_DIR} ${TETGEN_INCLUDE_DIR})
+link_directories(${TETGEN_INCLUDE_DIR})
 
 add_library(mesh_processing STATIC
     # SurfaceMesh data structure.
@@ -26,6 +29,12 @@ add_library(mesh_processing STATIC
 
     # SurfaceGeometry data structure (simple wrapper to SurfaceMesh which gives vertex positions by default).
     src/surface_geometry/surface_geometry.cpp
+
+    # Tetgen conversion.
+    src/tetrahedralization/tetrahedralization.cpp
+    # Compile tetgen here (---need to fix linking problems when done separately).
+    dependencies/tetgen/tetgen1.6.0/tetgen.cxx
+    dependencies/tetgen/tetgen1.6.0/predicates.cxx
 
     # Enmesh mesh generation sublibrary.
     # src/enmesh/grid.cpp
@@ -45,9 +54,6 @@ if(build_extension_assimp_convert)
     target_link_libraries(mesh_processing assimp_convert)
 endif()
 
-# Link dependencies.
-target_link_libraries(mesh_processing tet)
-
 
 # Compile example applications
 add_executable(simple1 examples/simple1/simple1.cpp)
@@ -55,3 +61,4 @@ target_link_libraries(simple1 mesh_processing)
 
 add_executable(simple2 examples/simple2/simple2.cpp)
 target_link_libraries(simple2 mesh_processing)
+
