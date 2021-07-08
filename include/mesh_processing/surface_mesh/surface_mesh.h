@@ -289,6 +289,10 @@ private:
 };
 
 
+/* Important invariants:
+ *    If nothing is deleted from a surface mesh, then elements must be contiguous. The ability to make this assumption is useful (e.g. when loading from
+ *    a triangle list).
+ */
 class SurfaceMesh {
 public:
     SurfaceMesh();

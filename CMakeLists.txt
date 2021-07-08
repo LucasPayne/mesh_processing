@@ -30,6 +30,9 @@ add_library(mesh_processing STATIC
     # SurfaceGeometry data structure (simple wrapper to SurfaceMesh which gives vertex positions by default).
     src/surface_geometry/surface_geometry.cpp
 
+    # Compactified mesh/geometry data structures (intended for rendering and algorithms that don't need the flexibility of e.g. SurfaceMesh).
+    src/compactified/compactified.cpp
+
     # Tetgen conversion.
     src/tetrahedralization/tetrahedralization.cpp
     # Compile tetgen here (---need to fix linking problems when done separately).

@@ -19,7 +19,19 @@ simply include mesh_processing.h and link against the compiled library.
 
 # References
 -----------------------
-The half-edge mesh data structure is largely based off of the [paper](imr.sandia.gov/papers/imr20/Sieger.pdf) by Mario Botsch, Daniel Sieger, (2011), "Design, Implementation, and Evaluation of the Surface_mesh data structure". A very good mesh library based off of these same principles is [geometry-central](https://github.com/nmwsharp/geometry-central).
+The half-edge mesh data structure is largely based off of the [paper](imr.sandia.gov/papers/imr20/Sieger.pdf) by Mario Botsch, Daniel Sieger, (2011), "Design, Implementation, and Evaluation of the Surface_mesh data structure".
+
+- [geometry-central](https://github.com/nmwsharp/geometry-central):
+    A very good mesh data structure based off of the same principles.
+    ([See this SGP 2020 video](https://www.youtube.com/watch?v=mw5Xz9CFZ7A))
+- [libigl](https://github.com/libigl/libigl):
+    A very good geometry processing algorithms library, with an OpenGL viewer. The core data structure is a simple
+    vertex and incidence list.
+    ([See this SGP 2020 video](https://www.youtube.com/watch?v=OSQWCABxLsM))
+- [pmp-library, The Polygon Mesh Processing library](https://github.com/pmp-library/pmp-library)
+    ([See this SGP 2020 video](https://www.youtube.com/watch?v=RXc9af0Rq8s))
+- [OpenMesh](https://www.graphics.rwth-aachen.de/software/openmesh/)
+- [OpenVolumeMesh](https://www.graphics.rwth-aachen.de/software/openvolumemesh/)
 
 
 ## The library
