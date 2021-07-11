@@ -13,9 +13,5 @@ int main(void)
     std::cout << tris.num_vertices() << "\n";
     std::cout << tris.num_triangles() << "\n";
 
-    auto geom2 = SurfaceGeometry(tris);
-    std::cout << geom2.mesh.num_vertices() << "\n";
-    std::cout << geom2.mesh.num_faces() << "\n";
-
     // auto tet = TetgenMesh(*geom);
 }

@@ -11,7 +11,6 @@ set(EIGEN3_INCLUDE_DIR "usr/include/eigen3")
 find_package(Eigen3 REQUIRED)
 add_compile_options(-DTETLIBRARY)
 # add_subdirectory(dependencies/tetgen/tetgen1.6.0)
-# Note: Compilation -DTETLIBRARY must be specified in the tetgen CMake file.
 set(TETGEN_INCLUDE_DIR "dependencies/tetgen/tetgen1.6.0")
 
 include_directories(. include ${EIGEN3_INCLUDE_DIR} ${TETGEN_INCLUDE_DIR})
@@ -24,9 +23,6 @@ add_library(mesh_processing STATIC
     src/surface_mesh/topology.cpp
     src/surface_mesh/euler_editing.cpp
 
-    # Surface subdivision.
-    src/subdivision/subdivision.cpp
-
     # SurfaceGeometry data structure (simple wrapper to SurfaceMesh which gives vertex positions by default).
     src/surface_geometry/surface_geometry.cpp
 
@@ -38,6 +34,12 @@ add_library(mesh_processing STATIC
     # Compile tetgen here (---need to fix linking problems when done separately).
     dependencies/tetgen/tetgen1.6.0/tetgen.cxx
     dependencies/tetgen/tetgen1.6.0/predicates.cxx
+
+    # Surface subdivision.
+    src/subdivision/subdivision.cpp
+
+    # Surface fairing.
+    src/fairing/fairing.cpp
 
     # Enmesh mesh generation sublibrary.
     # src/enmesh/grid.cpp

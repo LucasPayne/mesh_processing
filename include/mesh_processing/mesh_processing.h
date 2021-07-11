@@ -11,11 +11,17 @@
 
 #include <Eigen/Core>
 
+// Data structures
 #include "surface_mesh/surface_mesh.h"
 #include "surface_geometry/surface_geometry.h"
+#include "compactified/compactified.h"
+
+// Geometric algorithms
 #include "subdivision/subdivision.h"
 #include "tetrahedralization/tetrahedralization.h"
-#include "compactified/compactified.h"
+#include "fairing/fairing.h"
+
+// Mesh generation
 // #include "enmesh/enmesh.h"
 
 #endif // MESH_PROCESSING_H

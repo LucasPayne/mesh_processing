@@ -6,7 +6,7 @@ Other things that could be implemented here are curves and surface methods such 
 ## Including mesh_processing in an application
 -----------------------
 mesh_processing is built with CMake and requires C++11.
-First, make sure all dependencies are available on your system. Create a new directory called "build", and
+First, make sure all dependencies are available on your system. Create a new directory called "build", cd to it, and
 run "cmake ..".
 To include mesh_processing in a C++ application,
 simply include mesh_processing.h and link against the compiled library.
@@ -19,7 +19,7 @@ simply include mesh_processing.h and link against the compiled library.
 
 # References
 -----------------------
-The half-edge mesh data structure is largely based off of the [paper](imr.sandia.gov/papers/imr20/Sieger.pdf) by Mario Botsch, Daniel Sieger, (2011), "Design, Implementation, and Evaluation of the Surface_mesh data structure".
+The half-edge mesh data structure is largely based off of the [paper](imr.sandia.gov/papers/imr20/Sieger.pdf) by Mario Botsch and Daniel Sieger, (2011), "Design, Implementation, and Evaluation of the Surface_mesh data structure". This data structure is intended to be useful, for example, for algorithms described in the book [Polygon Mesh Processing](http://www.pmp-book.org/).
 
 - [geometry-central](https://github.com/nmwsharp/geometry-central):
     A very good mesh data structure based off of the same principles.
@@ -32,6 +32,10 @@ The half-edge mesh data structure is largely based off of the [paper](imr.sandia
     ([See this SGP 2020 video](https://www.youtube.com/watch?v=RXc9af0Rq8s))
 - [OpenMesh](https://www.graphics.rwth-aachen.de/software/openmesh/)
 - [OpenVolumeMesh](https://www.graphics.rwth-aachen.de/software/openvolumemesh/)
+- [OpenFlipper](https://www.graphics.rwth-aachen.de/software/openflipper/)
+- [MeshLab](https://en.wikipedia.org/wiki/MeshLab)
+- [VCG, Visualization and Computer Graphics Library](http://vcg.isti.cnr.it/vcglib/)
+
 
 
 ## The library

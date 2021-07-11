@@ -23,5 +23,24 @@ private:
     size_t m_num_triangles;
 };
 
+class CompactTetMesh {
+public:
+    CompactTetMesh();
+
+    vec_t position(size_t vertex_index) const;
+    int tet_vertex_index(size_t tet_index, size_t vertex_number) const;
+    int tet_adjacent(size_t tet_index, size_t adjacent_tet_number) const;
+
+    inline size_t num_vertices() const { return m_num_vertices; }
+    inline size_t num_tets() const { return m_num_tets; }
+
+private:
+    Eigen::MatrixXf m_position_data;
+    Eigen::MatrixXi m_tet_data;
+
+    size_t m_num_vertices;
+    size_t m_num_tets;
+};
+
 
 #endif // MESH_PROCESSING_COMPACITIFIED

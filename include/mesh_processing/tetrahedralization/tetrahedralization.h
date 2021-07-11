@@ -3,13 +3,9 @@
 #include <stdint.h>
 
 
-// Non-editable basic output of tetgen.
-class TetgenMesh {
-public:
-    TetgenMesh(SurfaceGeometry &geom);
-private:
-};
 
+// Tetgen
+CompactTetMesh tetgen_tetrahedralize(SurfaceGeometry &geom);
 
 
 

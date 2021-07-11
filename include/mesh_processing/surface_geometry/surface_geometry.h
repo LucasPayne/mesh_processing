@@ -16,7 +16,7 @@ public:
 
     // Convert from a simple list of vertex positions and triangle indices.
     // This creates the underlying mesh then attaches geometry positions.
-    SurfaceGeometry(CompactTriangleMesh &tris);
+    // SurfaceGeometry(CompactTriangleMesh &tris);
 };
 
 #endif // SURFACE_GEOMETRY_H

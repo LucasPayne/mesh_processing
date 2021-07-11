@@ -2,8 +2,7 @@
 #include "tetgen.h"
 
 
-
-TetgenMesh::TetgenMesh(SurfaceGeometry &geom)
+CompactTetMesh tetgen_tetrahedralize(SurfaceGeometry &geom)
 {
     assert(geom.mesh.locked() && geom.mesh.closed());
     
@@ -80,7 +79,16 @@ TetgenMesh::TetgenMesh(SurfaceGeometry &geom)
     // Retrieve tetgen output.
     //------------------------------------------------------------
     tetgenio out;
-    tetrahedralize("pq1.414a0.1", &in, &out);
+    auto flags = std::string("pq1.414a0.1");
+    tetrahedralize(const_cast<char *>(flags.c_str()), &in, &out);
+
+
+    // // Convert to 
+    // //------------------------------------------------------------
+    // CompactTetMesh tet_mesh;
+    // tet_mesh.m_num_vertices = out
+
+
     out.save_nodes("barout");
     out.save_elements("barout");
     out.save_faces("barout");
