@@ -97,6 +97,7 @@ public:
     ~ElementAttachment();
 protected:
     ElementAttachment(ElementPool &_pool);
+    const T &get(ElementIndex element_index) const;
     T &get(ElementIndex element_index); // [] overload isn't used here since the only users are derived classes.
 private:
     virtual void resize(size_t n) final;
@@ -116,6 +117,7 @@ template <typename T>
 class VertexAttachment : public ElementAttachment<T> {
 public:
     VertexAttachment(SurfaceMesh &mesh);
+    const T &operator[](const Vertex &vertex) const;
     T &operator[](const Vertex &vertex);
 };
 
@@ -124,6 +126,7 @@ template <typename T>
 class HalfedgeAttachment : public ElementAttachment<T> {
 public:
     HalfedgeAttachment(SurfaceMesh &mesh);
+    const T &operator[](const Halfedge &halfedge) const;
     T &operator[](const Halfedge &halfedge);
 };
 
@@ -132,6 +135,7 @@ template <typename T>
 class EdgeAttachment : public ElementAttachment<T> {
 public:
     EdgeAttachment(SurfaceMesh &mesh);
+    const T &operator[](const Edge &edge) const;
     T &operator[](const Edge &edge);
 };
 
@@ -140,6 +144,7 @@ template <typename T>
 class FaceAttachment : public ElementAttachment<T> {
 public:
     FaceAttachment(SurfaceMesh &mesh);
+    const T &operator[](const Face &face) const;
     T &operator[](const Face &face);
 };
 
@@ -195,6 +200,8 @@ public:
     Vertex() :
         ElementHandle(g_dummy_surface_mesh, InvalidElementIndex)
     {}
+
+    bool on_boundary() const; // Only valid when mesh is locked.
 
     //todo: Hide from public interface.
     Vertex(SurfaceMesh &_mesh, ElementIndex _index) :
@@ -257,6 +264,10 @@ class Edge : public ElementHandle {
 public:
     Halfedge a() const;
     Halfedge b() const;
+
+    inline bool on_boundary() const {
+        return a().face().null() || b().face().null();
+    };
 
     Edge() :
         ElementHandle(g_dummy_surface_mesh, InvalidElementIndex)
@@ -335,9 +346,16 @@ public:
 
     // Counting elements.
     size_t num_vertices() const;
+    size_t num_interior_vertices() const;
     size_t num_halfedges() const;
     size_t num_faces() const;
     size_t num_edges() const;
+    size_t num_interior_edges() const;
+
+    // Accessors.
+    // If there is an edge, this returns the edge between vertex a and b.
+    // If not, this gives a null handle. This is only valid when the mesh is locked.
+    Edge vertices_to_edge(Vertex a, Vertex b);
 
     void printout();
     
@@ -386,6 +404,8 @@ private:
     EdgeAttachment<EdgeIncidenceData> edge_incidence_data;
     FaceAttachment<FaceIncidenceData> face_incidence_data;
 
+    VertexAttachment<uint8_t> vertex_on_boundary; // Cache boundary-ness of vertices when the mesh is locked.
+
     // Map from pairs of vertex indices to halfedge indices.
     // get_halfedge is used to test if there is already a halfedge between two vertices,
     // and when setting up twin incidence relations.
@@ -397,6 +417,8 @@ private:
     std::vector<Halfedge> m_boundary_loops;
     std::vector<Face> m_connected_components;
     bool m_locked;
+    int m_num_interior_vertices; // Only valid when locked.
+    int m_num_interior_edges;    // Only valid when locked.
 
     
     template <typename T>

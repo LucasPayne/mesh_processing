@@ -206,6 +206,41 @@ void SurfaceMesh::lock()
     //         search(face);
     //     }
     // };
+    
+    // Cache vertex boundary-ness, and count the number of interior vertices.
+    for (auto v : vertices()) {
+        vertex_on_boundary[v] = 0;
+    }
+    for (auto start : m_boundary_loops) {
+        auto he = start;
+        do {
+            vertex_on_boundary[he.vertex()] = 1;
+            he = he.next();
+        } while (he != start);
+    }
+
+    // For each vertex on the boundary, make sure that the outgoing halfedge
+    // has a nonnull face, and that this is the first face, such that all faces can be traversed.
+    for (auto start : m_boundary_loops) {
+        auto he = start;
+        do {
+            auto v = he.vertex();
+            assert(!he.twin().next().null());
+            v.set_halfedge(he.twin().next());
+            he = he.next();
+        } while (he != start);
+    }
+
+    // Count the number of interior vertices.
+    m_num_interior_vertices = 0;
+    for (auto v : vertices()) {
+        if (!v.on_boundary()) m_num_interior_vertices += 1;
+    }
+    // Count the number of interior edges.
+    m_num_interior_edges = 0;
+    for (auto edge : edges()) {
+        if (!edge.on_boundary()) m_num_interior_edges += 1;
+    }
 
     m_locked = true;
     printf("lock(): Complete.\n");
@@ -232,7 +267,7 @@ void SurfaceMesh::unlock()
             }
             // IMPORTANT: Remove the halfedge from the vertex_indices->halfedge map.
             // Usually, the halfedge tip can be retrieved by he.next().vertex(). However, while deleting this loop of halfedges,
-            // there is a special when removing the last halfedge, as its next() is now invalid.
+            // there is a special case when removing the last halfedge, as its next() is now invalid.
             auto vertex_indices = he.next() == start ? std::pair<ElementIndex, ElementIndex>(he.vertex().index(), start_vertex.index())
                                                      : std::pair<ElementIndex, ElementIndex>(he.vertex().index(), he.next().vertex().index());
             auto found = halfedge_map.find(vertex_indices);

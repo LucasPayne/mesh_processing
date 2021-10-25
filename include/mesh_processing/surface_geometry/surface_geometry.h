@@ -14,6 +14,10 @@ public:
         position(mesh)
     {}
 
+    // Geometry helpers.
+    float triangle_area(Face tri) const;
+    vec_t barycenter(Face face) const;
+
     // Convert from a simple list of vertex positions and triangle indices.
     // This creates the underlying mesh then attaches geometry positions.
     // SurfaceGeometry(CompactTriangleMesh &tris);

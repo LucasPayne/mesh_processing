@@ -111,6 +111,14 @@ bool SurfaceMesh::remove_face(Face face)
 }
 
 
+Edge SurfaceMesh::vertices_to_edge(Vertex u, Vertex v)
+{
+    assert(locked());
+    Halfedge he = get_halfedge(u, v);
+    return he.edge();
+}
+
+
 // private methods
 //--------------------------------------------------------------------------------
 Halfedge SurfaceMesh::get_halfedge(Vertex u, Vertex v)

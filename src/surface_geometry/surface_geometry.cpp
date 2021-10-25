@@ -1,6 +1,41 @@
 #include "mesh_processing/mesh_processing.h"
 
 
+float SurfaceGeometry::triangle_area(Face tri) const
+{
+    assert(tri.num_vertices() == 3);
+    Vertex verts[3];
+    int vertex_index = 0;
+    auto he = tri.halfedge();
+    do {
+        he = he.next();
+        verts[vertex_index] = he.vertex();
+    } while (++vertex_index < 3);
+
+    auto A = position[verts[0]];
+    auto B = position[verts[1]];
+    auto C = position[verts[2]];
+    return 0.5f*(B-A).cross(C-A).norm();
+}
+
+
+vec_t SurfaceGeometry::barycenter(Face face) const
+{
+    vec_t avg = vec_t(0,0,0);
+
+    auto start = face.halfedge();
+    auto he = start;
+    int num_vertices = 0;
+    do {
+        avg += position[he.vertex()];
+        num_vertices += 1;
+        he = he.next();
+    } while (he != start);
+    avg /= num_vertices;
+    return avg;
+}
+
+
 // SurfaceGeometry::SurfaceGeometry(CompactTriangleMesh &tris)
 // {
 //     for (int i = 0; i < tris.num_vertices(); i++) {

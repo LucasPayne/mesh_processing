@@ -226,6 +226,16 @@ size_t Vertex::num_adjacent_vertices() const
     return n;
 }
 
+bool Vertex::on_boundary() const
+{
+    if (!mesh.locked()) {
+        std::cerr << "mesh traversal error: Vertex::on_boundary() is only valid when the mesh is locked.\n";
+        exit(EXIT_FAILURE);
+    }
+    return mesh.vertex_on_boundary[*this] != 0;
+}
+
+
 Halfedge Halfedge::next() const
 {
     return Halfedge(mesh, mesh.halfedge_incidence_data[*this].next_index);
@@ -293,6 +303,7 @@ SurfaceMesh::SurfaceMesh() :
     halfedge_incidence_data(*this),
     edge_incidence_data(*this),
     face_incidence_data(*this),
+    vertex_on_boundary(*this),
     m_locked{false}
 {
 }
@@ -300,6 +311,11 @@ SurfaceMesh::SurfaceMesh() :
 size_t SurfaceMesh::num_vertices() const
 {
     return vertex_pool.num_elements();
+}
+size_t SurfaceMesh::num_interior_vertices() const
+{
+    assert(locked());
+    return m_num_interior_vertices;
 }
 size_t SurfaceMesh::num_halfedges() const
 {
@@ -314,6 +330,11 @@ size_t SurfaceMesh::num_edges() const
     // The idea of "edge" is only valid when the mesh is locked.
     assert(locked() && num_halfedges() % 2 == 0);
     return num_halfedges() / 2;
+}
+size_t SurfaceMesh::num_interior_edges() const
+{
+    assert(locked() && num_halfedges() % 2 == 0);
+    return m_num_interior_edges;
 }
 
 // Copy assignment.

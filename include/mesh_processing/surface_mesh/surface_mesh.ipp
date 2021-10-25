@@ -31,10 +31,17 @@ ElementAttachment<T>::~ElementAttachment()
 
 // Accessor.
 template <typename T>
-T &ElementAttachment<T>::get(ElementIndex element_index)
+const T &ElementAttachment<T>::get(ElementIndex element_index) const
 {
     assert(pool.is_active(element_index));
     return data[element_index];
+}
+template <typename T>
+T &ElementAttachment<T>::get(ElementIndex element_index)
+{
+    // ...
+    // https://riptutorial.com/cplusplus/example/16974/avoiding-duplication-of-code-in-const-and-non-const-getter-methods-
+    return const_cast<T &>(const_cast<const ElementAttachment<T> *>(this)->get(element_index));
 }
 
 
@@ -75,9 +82,14 @@ VertexAttachment<T>::VertexAttachment(SurfaceMesh &mesh) :
 {}
 
 template <typename T>
-T &VertexAttachment<T>::operator[](const Vertex &vertex)
+const T &VertexAttachment<T>::operator[](const Vertex &vertex) const
 {
     return this->get(vertex.index());
+}
+template <typename T>
+T &VertexAttachment<T>::operator[](const Vertex &vertex)
+{
+    return const_cast<T &>(const_cast<const VertexAttachment<T> *>(this)->operator[](vertex));
 }
 
 
@@ -90,9 +102,14 @@ HalfedgeAttachment<T>::HalfedgeAttachment(SurfaceMesh &mesh) :
 {}
 
 template <typename T>
-T &HalfedgeAttachment<T>::operator[](const Halfedge &halfedge)
+const T &HalfedgeAttachment<T>::operator[](const Halfedge &halfedge) const
 {
     return this->get(halfedge.index());
+}
+template <typename T>
+T &HalfedgeAttachment<T>::operator[](const Halfedge &halfedge)
+{
+    return const_cast<T &>(const_cast<const HalfedgeAttachment<T> *>(this)->operator[](halfedge));
 }
 
 
@@ -109,6 +126,12 @@ T &EdgeAttachment<T>::operator[](const Edge &edge)
 {
     return this->get(edge.index());
 }
+template <typename T>
+const T &EdgeAttachment<T>::operator[](const Edge &edge) const
+{
+    return const_cast<T &>(const_cast<const EdgeAttachment<T> *>(this)->operator[](edge));
+}
+
 
 
 
@@ -125,7 +148,11 @@ T &FaceAttachment<T>::operator[](const Face &face)
 {
     return this->get(face.index());
 }
-
+template <typename T>
+const T &FaceAttachment<T>::operator[](const Face &face) const
+{
+    return const_cast<T &>(const_cast<const FaceAttachment<T> *>(this)->operator[](face));
+}
 
 /*--------------------------------------------------------------------------------
     Element iterators.
