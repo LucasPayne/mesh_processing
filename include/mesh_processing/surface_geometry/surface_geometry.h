@@ -17,6 +17,9 @@ public:
     // Geometry helpers.
     float triangle_area(Face tri) const;
     vec_t barycenter(Face face) const;
+    vec_t triangle_normal(Face tri) const;
+    vec_t midpoint(Halfedge he) const;
+    vec_t midpoint(Edge edge) const;
 
     // Convert from a simple list of vertex positions and triangle indices.
     // This creates the underlying mesh then attaches geometry positions.

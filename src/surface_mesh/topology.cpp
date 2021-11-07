@@ -230,7 +230,10 @@ void SurfaceMesh::lock()
             he = he.next();
         } while (he != start);
     }
-
+    m_locked = true;
+    
+    // Post-lock changes. NOTE: Be careful! Try to minimize the number of post-lock changes,
+    // and make sure they don't assume that the whole mesh is "fully locked" (as the data below still has to be initialized).
     // Count the number of interior vertices.
     m_num_interior_vertices = 0;
     for (auto v : vertices()) {
@@ -242,7 +245,6 @@ void SurfaceMesh::lock()
         if (!edge.on_boundary()) m_num_interior_edges += 1;
     }
 
-    m_locked = true;
     printf("lock(): Complete.\n");
 }
 

@@ -35,6 +35,25 @@ vec_t SurfaceGeometry::barycenter(Face face) const
     return avg;
 }
 
+vec_t SurfaceGeometry::triangle_normal(Face tri) const
+{
+    assert(tri.num_vertices() == 3);
+    vec_t A = position[tri.halfedge().vertex()];
+    vec_t B = position[tri.halfedge().next().vertex()];
+    vec_t C = position[tri.halfedge().next().next().vertex()];
+    vec_t n = (B-A).cross(C-A);
+    return n / n.norm();
+}
+
+vec_t SurfaceGeometry::midpoint(Halfedge he) const
+{
+    return 0.5*position[he.vertex()] + 0.5*position[he.tip()];
+}
+vec_t SurfaceGeometry::midpoint(Edge edge) const
+{
+    return 0.5*position[edge.a().vertex()] + 0.5*position[edge.b().vertex()];
+}
+
 
 // SurfaceGeometry::SurfaceGeometry(CompactTriangleMesh &tris)
 // {
