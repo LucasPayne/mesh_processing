@@ -20,6 +20,7 @@ public:
     vec_t triangle_normal(Face tri) const;
     vec_t midpoint(Halfedge he) const;
     vec_t midpoint(Edge edge) const;
+    vec_t vector(Halfedge he) const;
 
     // Convert from a simple list of vertex positions and triangle indices.
     // This creates the underlying mesh then attaches geometry positions.

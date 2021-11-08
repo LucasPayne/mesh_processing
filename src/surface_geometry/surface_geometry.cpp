@@ -54,6 +54,11 @@ vec_t SurfaceGeometry::midpoint(Edge edge) const
     return 0.5*position[edge.a().vertex()] + 0.5*position[edge.b().vertex()];
 }
 
+vec_t SurfaceGeometry::vector(Halfedge he) const
+{
+    return position[he.tip()] - position[he.vertex()];
+}
+
 
 // SurfaceGeometry::SurfaceGeometry(CompactTriangleMesh &tris)
 // {
