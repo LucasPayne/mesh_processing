@@ -22,6 +22,6 @@
 #include "fairing/fairing.h"
 
 // Mesh generation
-// #include "enmesh/enmesh.h"
+#include "enmesh/enmesh.h"
 
 #endif // MESH_PROCESSING_H

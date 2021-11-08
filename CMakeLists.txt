@@ -42,8 +42,7 @@ add_library(mesh_processing STATIC
     src/fairing/fairing.cpp
 
     # Enmesh mesh generation sublibrary.
-    # src/enmesh/grid.cpp
-    # src/enmesh/io.cpp
+    src/enmesh/io.cpp
 )
 target_compile_options(mesh_processing PRIVATE -Wall -g)
 
